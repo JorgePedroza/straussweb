@@ -16,14 +16,14 @@ class UsuarioProvider {
     }
   }
 
-  Future register(
-      String nombre, String email, String password, String date) async {
+  Future register( String nombre, String email, String password, String date) async {
    
   
     try {
-      UserCredential g = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
+     final g = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
+       print(g.user.uid);
        _createPost(g.user.uid);
-      await g.user.updateProfile(displayName: nombre);
+      await g.user.updateDisplayName(nombre);
       DocumentReference userRef = FirebaseFirestore.instance.collection('usuarios').doc();
 
       userRef.set(
@@ -43,11 +43,9 @@ class UsuarioProvider {
 
 _createPost(String id) {
     DocumentReference mypost = FirebaseFirestore.instance.collection('mypost').doc(id);
-    mypost.set(
-      {
-       
-      },
-    );
+    mypost.set({
+      'initpost':'initpost'
+    });
     
   }
 

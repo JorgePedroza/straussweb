@@ -68,9 +68,12 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      'assets/ima6.png',
-                      width: 400,
+                    Hero(
+                      tag: 'strauss',
+                      child: Image.asset(
+                        'assets/ima6.png',
+                        width: 400,
+                      ),
                     ),
                     SizedBox(
                       height: 80,
@@ -372,7 +375,6 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Widget _bottonRegistrar(bloc) {
-    
     return StreamBuilder<Object>(
         stream: bloc.formValidStream,
         builder: (context, snapshot) {
@@ -404,17 +406,18 @@ class _RegisterPageState extends State<RegisterPage> {
   _registerUser(bloc, BuildContext context) async {
     print('Se creo una cuenta');
 
-    final info = await usuarioProvider.register(bloc.name, bloc.email, bloc.password, bloc.date);
+    final info = await usuarioProvider.register(
+        bloc.name, bloc.email, bloc.password, bloc.date);
 
     if (info['ok']) {
       Navigator.pushNamed(context, 'navegacion');
     } else {
       print(info['mensaje']);
-       mostrarAlerta(context, info['mensaje']);
+      mostrarAlerta(context, info['mensaje']);
     }
   }
 
   _errorCampos(message) async {
-     mostrarAlerta(context, message);
+    mostrarAlerta(context, message);
   }
 }

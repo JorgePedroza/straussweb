@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
     return Provider(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Material App',
+        title: 'Strauss',
         initialRoute: 'navegacion',
         routes: getRoutes(),
       ),

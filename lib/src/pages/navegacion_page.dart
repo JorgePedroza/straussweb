@@ -12,15 +12,15 @@ class NavegacionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = Provider.of(context);
-   
+
     return Scaffold(
-      backgroundColor: Colors.blue[900],
+      backgroundColor: azulOscuro(),
       body: SingleChildScrollView(
         child: Column(
           children: [
-           AppBarPage(),
+            AppBarPage(),
             Container(
-              color: Colors.white,
+             // color: Colors.black26,
               height: MediaQuery.of(context).size.height - 60,
               child: StreamBuilder(
                 stream: bloc.pageStream,
@@ -85,6 +85,7 @@ class _AppBarPageState extends State<AppBarPage> {
   }
 
   Widget appBarWeb() {
+    FirebaseAuth auth = FirebaseAuth.instance;
     return Container(
       height: 60,
       width: double.infinity,
@@ -105,75 +106,93 @@ class _AppBarPageState extends State<AppBarPage> {
           Expanded(
             child: Container(),
           ),
-          ElevatedButton(
-              style: ButtonStyle(
-                elevation: MaterialStateProperty.all(0),
-                backgroundColor: MaterialStateProperty.all(_color11),
-              ),
-              child: Container(
-                  height: 60,
-                  width: 82,
-                  child: Tooltip(
-                      message: 'Home',
-                      child: Icon(Icons.home, size: 30, color: _color1))),
-              onPressed: () {
-                setState(() {
-                  appBarNavigator(0);
-                });
-              }),
-          ElevatedButton(
-              style: ButtonStyle(
-                elevation: MaterialStateProperty.all(0),
-                backgroundColor: MaterialStateProperty.all(_color22),
-              ),
-              child: Container(
-                  height: 60,
-                  width: 82,
-                  child: Tooltip(
-                      message: 'Personal',
-                      child:
-                          Icon(Icons.person_sharp, size: 30, color: _color2))),
-              onPressed: () {
-                setState(() {
-                  appBarNavigator(1);
+          StreamBuilder<User>(
+              stream: auth.authStateChanges(),
+              builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
+                if (snapshot.hasData) {
+                  return Row(
+                    children: [
+                      ElevatedButton(
+                          style: ButtonStyle(
+                            elevation: MaterialStateProperty.all(0),
+                            backgroundColor:
+                                MaterialStateProperty.all(_color11),
+                          ),
+                          child: Container(
+                              height: 60,
+                              width: 82,
+                              child: Tooltip(
+                                  message: 'Home',
+                                  child: Icon(Icons.home,
+                                      size: 30, color: _color1))),
+                          onPressed: () {
+                            setState(() {
+                              appBarNavigator(0);
+                            });
+                          }),
+                      ElevatedButton(
+                          style: ButtonStyle(
+                            elevation: MaterialStateProperty.all(0),
+                            backgroundColor:
+                                MaterialStateProperty.all(_color22),
+                          ),
+                          child: Container(
+                              height: 60,
+                              width: 82,
+                              child: Tooltip(
+                                  message: 'Personal',
+                                  child: Icon(Icons.person_sharp,
+                                      size: 30, color: _color2))),
+                          onPressed: () {
+                            setState(() {
+                              appBarNavigator(1);
 
-                  // appBarNavigator();
-                });
-              }),
-          ElevatedButton(
-              style: ButtonStyle(
-                elevation: MaterialStateProperty.all(0),
-                backgroundColor: MaterialStateProperty.all(_color33),
-              ),
-              child: Container(
-                  height: 60,
-                  width: 82,
-                  child: Tooltip(
-                      message: 'Help',
-                      child: Icon(Icons.help_center_rounded,
-                          size: 30, color: _color3))),
-              onPressed: () {
-                setState(() {
-                  appBarNavigator(2);
-                  // appBarNavigator();
-                });
-              }),
-          ElevatedButton(
-              style: ButtonStyle(
-                elevation: MaterialStateProperty.all(0),
-                backgroundColor: MaterialStateProperty.all(_color44),
-              ),
-              child: Container(
-                  height: 60,
-                  width: 82,
-                  child: Tooltip(
-                      message: 'Settings',
-                      child: Icon(Icons.settings, size: 30, color: _color4))),
-              onPressed: () {
-                setState(() {
-                  appBarNavigator(3);
-                  // appBarNavigator();
-                });
+                              // appBarNavigator();
+                            });
+                          }),
+                      ElevatedButton(
+                          style: ButtonStyle(
+                            elevation: MaterialStateProperty.all(0),
+                            backgroundColor:
+                                MaterialStateProperty.all(_color33),
+                          ),
+                          child: Container(
+                              height: 60,
+                              width: 82,
+                              child: Tooltip(
+                                  message: 'Help',
+                                  child: Icon(Icons.help_center_rounded,
+                                      size: 30, color: _color3))),
+                          onPressed: () {
+                            setState(() {
+                              appBarNavigator(2);
+                              // appBarNavigator();
+                            });
+                          }),
+                      ElevatedButton(
+                          style: ButtonStyle(
+                            elevation: MaterialStateProperty.all(0),
+                            backgroundColor:
+                                MaterialStateProperty.all(_color44),
+                          ),
+                          child: Container(
+                              height: 60,
+                              width: 82,
+                              child: Tooltip(
+                                  message: 'Settings',
+                                  child: Icon(Icons.settings,
+                                      size: 30, color: _color4))),
+                          onPressed: () {
+                            setState(() {
+                              appBarNavigator(3);
+                              // appBarNavigator();
+                            });
+                          }),
+                    ],
+                  );
+                } else {
+                  return Expanded(child: Container());
+                }
               }),
           Expanded(
             child: Container(),
@@ -501,7 +520,7 @@ class _AppBarPageState extends State<AppBarPage> {
         child: ElevatedButton(
           style: ButtonStyle(
               backgroundColor:
-                  MaterialStateProperty.all(Color.fromRGBO(16, 30, 90, 1))),
+                  MaterialStateProperty.all(azul20())),
           child: Center(
             child: Text('Crear cuenta'),
           ),
@@ -575,14 +594,15 @@ class _AppBarPageState extends State<AppBarPage> {
                             color: azulOscuro(),
                           ),
                           style: ButtonStyle(
-                              backgroundColor:
-                                  MaterialStateProperty.all(Colors.red),
-                            ),
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.red),
+                          ),
                           onPressed: () {
                             UsuarioProvider f = UsuarioProvider();
+                            final bloc = Provider.of(context);
                             f.logout();
-                            Navigator.pushReplacementNamed(
-                                context, 'navegacion');
+                            Navigator.pushReplacementNamed(context, 'navegacion');
+                            bloc.changePage('home');
                           })
                     ],
                   ),
