@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:straussweb/src/bloc/provider.dart';
@@ -7,85 +8,63 @@ import 'package:straussweb/src/pages/help_page.dart';
 import 'package:straussweb/src/pages/home_page.dart';
 import 'package:straussweb/src/pages/mypost_page.dart';
 import 'package:straussweb/src/utils/colors_utils.dart';
+import 'package:straussweb/src/widgets/widgets.dart';
 
 class NavegacionPage extends StatelessWidget {
+  final FirebaseAuth auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     final bloc = Provider.of(context);
 
     return Scaffold(
       backgroundColor: azulOscuro(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            AppBarPage(),
-            Container(
-             // color: Colors.black26,
-              height: MediaQuery.of(context).size.height - 60,
-              child: StreamBuilder(
-                stream: bloc.pageStream,
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  switch (snapshot.data.toString()) {
-                    case 'home':
-                      return HomePage();
-                      break;
-                    case 'mypost':
-                      return MyPostPage();
-                      break;
-                    case 'help':
-                      return HelpPage();
-                      break;
-                    case 'config':
-                      return ConfigPage();
-                      break;
-
-                    default:
-                      return HomePage();
-                      break;
-                  }
-                },
-              ),
-            )
-          ],
-        ),
-      ),
+      body: layaout(
+          context,
+          Column(
+            children: [
+              appBarWeb(),
+              _pageActual(context, bloc),
+            ],
+          ),
+          Column(
+            children: [
+              appBarWeb2(),
+              _pageActual(context, bloc),
+            ],
+          ),
+          appBarMobil(context, bloc)),
     );
   }
-}
 
-class AppBarPage extends StatefulWidget {
-  @override
-  _AppBarPageState createState() => _AppBarPageState();
-}
-
-class _AppBarPageState extends State<AppBarPage> {
-  Color _color1 = Color.fromRGBO(16, 30, 90, 1);
-  Color _color2 = Colors.white;
-  Color _color3 = Colors.white;
-  Color _color4 = Colors.white;
-  Color _color11 = Colors.white;
-  Color _color22 = Colors.transparent;
-  Color _color33 = Colors.transparent;
-  Color _color44 = Colors.transparent;
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        if (constraints.maxWidth > 1300) {
-          return appBarWeb();
-        }
-        if (constraints.maxWidth > 750) {
-          return appBarWeb2();
-        } else {
-          return appBarMobil();
-        }
-      },
+  Widget _pageActual(BuildContext context, bloc) {
+    return Container(
+      height: MediaQuery.of(context).size.height - 60,
+      child: StreamBuilder(
+        stream: bloc.pageStream,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          switch (snapshot.data.toString()) {
+            case '0':
+              return HomePage();
+              break;
+            case '1':
+              return MyPostPage();
+              break;
+            case '2':
+              return HelpPage();
+              break;
+            case '3':
+              return ConfigPage();
+              break;
+            default:
+              return HomePageOff();
+              break;
+          }
+        },
+      ),
     );
   }
 
   Widget appBarWeb() {
-    FirebaseAuth auth = FirebaseAuth.instance;
     return Container(
       height: 60,
       width: double.infinity,
@@ -101,99 +80,12 @@ class _AppBarPageState extends State<AppBarPage> {
           Container(
             height: 40,
             width: 250,
-            child: _buscarGrupos(),
+            child: buscarGrupos(),
           ),
           Expanded(
             child: Container(),
           ),
-          StreamBuilder<User>(
-              stream: auth.authStateChanges(),
-              builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
-                if (snapshot.hasData) {
-                  return Row(
-                    children: [
-                      ElevatedButton(
-                          style: ButtonStyle(
-                            elevation: MaterialStateProperty.all(0),
-                            backgroundColor:
-                                MaterialStateProperty.all(_color11),
-                          ),
-                          child: Container(
-                              height: 60,
-                              width: 82,
-                              child: Tooltip(
-                                  message: 'Home',
-                                  child: Icon(Icons.home,
-                                      size: 30, color: _color1))),
-                          onPressed: () {
-                            setState(() {
-                              appBarNavigator(0);
-                            });
-                          }),
-                      ElevatedButton(
-                          style: ButtonStyle(
-                            elevation: MaterialStateProperty.all(0),
-                            backgroundColor:
-                                MaterialStateProperty.all(_color22),
-                          ),
-                          child: Container(
-                              height: 60,
-                              width: 82,
-                              child: Tooltip(
-                                  message: 'Personal',
-                                  child: Icon(Icons.person_sharp,
-                                      size: 30, color: _color2))),
-                          onPressed: () {
-                            setState(() {
-                              appBarNavigator(1);
-
-                              // appBarNavigator();
-                            });
-                          }),
-                      ElevatedButton(
-                          style: ButtonStyle(
-                            elevation: MaterialStateProperty.all(0),
-                            backgroundColor:
-                                MaterialStateProperty.all(_color33),
-                          ),
-                          child: Container(
-                              height: 60,
-                              width: 82,
-                              child: Tooltip(
-                                  message: 'Help',
-                                  child: Icon(Icons.help_center_rounded,
-                                      size: 30, color: _color3))),
-                          onPressed: () {
-                            setState(() {
-                              appBarNavigator(2);
-                              // appBarNavigator();
-                            });
-                          }),
-                      ElevatedButton(
-                          style: ButtonStyle(
-                            elevation: MaterialStateProperty.all(0),
-                            backgroundColor:
-                                MaterialStateProperty.all(_color44),
-                          ),
-                          child: Container(
-                              height: 60,
-                              width: 82,
-                              child: Tooltip(
-                                  message: 'Settings',
-                                  child: Icon(Icons.settings,
-                                      size: 30, color: _color4))),
-                          onPressed: () {
-                            setState(() {
-                              appBarNavigator(3);
-                              // appBarNavigator();
-                            });
-                          }),
-                    ],
-                  );
-                } else {
-                  return Expanded(child: Container());
-                }
-              }),
+          ItemsBar(),
           Expanded(
             child: Container(),
           ),
@@ -219,82 +111,12 @@ class _AppBarPageState extends State<AppBarPage> {
           Container(
             height: 40,
             width: 250,
-            child: _buscarGrupos(),
+            child: buscarGrupos(),
           ),
           Expanded(
             child: Container(),
           ),
-          ElevatedButton(
-              style: ButtonStyle(
-                elevation: MaterialStateProperty.all(0),
-                backgroundColor: MaterialStateProperty.all(_color11),
-              ),
-              child: Container(
-                  height: 60,
-                  width: 82,
-                  child: Tooltip(
-                      message: 'Home',
-                      child: Icon(Icons.home, size: 30, color: _color1))),
-              onPressed: () {
-                setState(() {
-                  appBarNavigator(0);
-                  //_page = 0;
-                });
-              }),
-          ElevatedButton(
-              style: ButtonStyle(
-                elevation: MaterialStateProperty.all(0),
-                backgroundColor: MaterialStateProperty.all(_color22),
-              ),
-              child: Container(
-                  height: 60,
-                  width: 82,
-                  child: Tooltip(
-                      message: 'Personal',
-                      child:
-                          Icon(Icons.person_sharp, size: 30, color: _color2))),
-              onPressed: () {
-                setState(() {
-                  appBarNavigator(1);
-
-                  // appBarNavigator();
-                });
-              }),
-          ElevatedButton(
-              style: ButtonStyle(
-                elevation: MaterialStateProperty.all(0),
-                backgroundColor: MaterialStateProperty.all(_color33),
-              ),
-              child: Container(
-                  height: 60,
-                  width: 82,
-                  child: Tooltip(
-                      message: 'Help',
-                      child: Icon(Icons.help_center_rounded,
-                          size: 30, color: _color3))),
-              onPressed: () {
-                setState(() {
-                  appBarNavigator(2);
-                  // appBarNavigator();
-                });
-              }),
-          ElevatedButton(
-              style: ButtonStyle(
-                elevation: MaterialStateProperty.all(0),
-                backgroundColor: MaterialStateProperty.all(_color44),
-              ),
-              child: Container(
-                  height: 60,
-                  width: 82,
-                  child: Tooltip(
-                      message: 'Settings',
-                      child: Icon(Icons.settings, size: 30, color: _color4))),
-              onPressed: () {
-                setState(() {
-                  appBarNavigator(3);
-                  // appBarNavigator();
-                });
-              }),
+          ItemsBar(),
           Expanded(
             child: Container(),
           ),
@@ -303,249 +125,108 @@ class _AppBarPageState extends State<AppBarPage> {
     );
   }
 
-  Widget appBarMobil() {
-    return Container(
-      height: 100,
-      width: double.infinity,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            padding: EdgeInsets.only(top: 5, bottom: 5),
-            color: Colors.blue[900],
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Image.asset(
-                    'assets/ima7.png',
-                    height: 45,
+  Widget appBarMobil(BuildContext context, bloc) {
+    return DefaultTabController(
+        initialIndex: 0,
+        length: 4,
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              backgroundColor: azulOscuro(),
+              floating: true,
+              pinned: true,
+              snap: false,
+              title: Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: Image.asset(
+                      'assets/ima7.png',
+                      height: 45,
+                    ),
                   ),
-                ),
-                Container(
-                  height: 40,
-                  width: MediaQuery.of(context).size.width * 0.6,
-                  child: _buscarGrupos(),
-                ),
-                _menuPop()
-              ],
+                  Container(
+                    height: 40,
+                    width: MediaQuery.of(context).size.width * 0.6,
+                    child: buscarGrupos(),
+                  ),
+                  _menuPop(context)
+                ],
+              ),
+              bottom: TabBar(
+                onTap: (i) {
+                  bloc.changePage('$i');
+                },
+                tabs: [
+                  Tab(
+                    icon: Icon(Icons.home),
+                  ),
+                  Tab(
+                    icon: Icon(Icons.person_sharp),
+                  ),
+                  Tab(
+                    icon: Icon(Icons.help_center_rounded),
+                  ),
+                  Tab(
+                    icon: Icon(Icons.settings),
+                  )
+                ],
+              ),
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                  style: ButtonStyle(
-                    elevation: MaterialStateProperty.all(0),
-                    backgroundColor: MaterialStateProperty.all(_color11),
-                  ),
-                  child: Container(
-                      height: 40,
-                      width: 45,
-                      child: Tooltip(
-                        message: 'Home',
-                        child: Icon(Icons.home, size: 26, color: _color1),
-                      )),
-                  onPressed: () {
-                    setState(() {
-                      appBarNavigator(0);
-                      //_page = 0;
-                    });
-                  }),
-              ElevatedButton(
-                  style: ButtonStyle(
-                    elevation: MaterialStateProperty.all(0),
-                    backgroundColor: MaterialStateProperty.all(_color22),
-                  ),
-                  child: Container(
-                      height: 40,
-                      width: 45,
-                      child: Tooltip(
-                          message: 'Personal',
-                          child: Icon(Icons.person_sharp,
-                              size: 26, color: _color2))),
-                  onPressed: () {
-                    setState(() {
-                      appBarNavigator(1);
-                      // appBarNavigator();
-                    });
-                  }),
-              ElevatedButton(
-                  style: ButtonStyle(
-                    elevation: MaterialStateProperty.all(0),
-                    backgroundColor: MaterialStateProperty.all(_color33),
-                  ),
-                  child: Container(
-                      height: 40,
-                      width: 45,
-                      child: Tooltip(
-                          message: 'Help',
-                          child: Icon(Icons.help_center_rounded,
-                              size: 26, color: _color3))),
-                  onPressed: () {
-                    setState(() {
-                      appBarNavigator(2);
-                      // appBarNavigator();
-                    });
-                  }),
-              ElevatedButton(
-                  style: ButtonStyle(
-                    elevation: MaterialStateProperty.all(0),
-                    backgroundColor: MaterialStateProperty.all(_color44),
-                  ),
-                  child: Container(
-                      height: 40,
-                      width: 45,
-                      child: Tooltip(
-                          message: 'Settings',
-                          child:
-                              Icon(Icons.settings, size: 26, color: _color4))),
-                  onPressed: () {
-                    setState(() {
-                      appBarNavigator(3);
-                      // appBarNavigator();
-                    });
-                  }),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
 
-  appBarNavigator(option) {
-    final bloc = Provider.of(context);
-    switch (option) {
-      case 0:
-        _color1 = Color.fromRGBO(16, 30, 90, 1);
-        _color2 = Colors.white;
-        _color3 = Colors.white;
-        _color4 = Colors.white;
-        _color11 = Colors.white;
-        _color22 = Colors.transparent;
-        _color33 = Colors.transparent;
-        _color44 = Colors.transparent;
-        bloc.changePage('home');
-
-        break;
-      case 1:
-        _color1 = Colors.white;
-        _color2 = Color.fromRGBO(16, 30, 90, 1);
-        _color3 = Colors.white;
-        _color4 = Colors.white;
-        _color11 = Colors.transparent;
-        _color22 = Colors.white;
-        _color33 = Colors.transparent;
-        _color44 = Colors.transparent;
-        bloc.changePage('mypost');
-
-        return MyPostPage();
-        break;
-      case 2:
-        _color1 = Colors.white;
-        _color2 = Colors.white;
-        _color3 = Color.fromRGBO(16, 30, 90, 1);
-        _color4 = Colors.white;
-        _color11 = Colors.transparent;
-        _color22 = Colors.transparent;
-        _color33 = Colors.white;
-        _color44 = Colors.transparent;
-        bloc.changePage('help');
-
-        return HelpPage();
-        break;
-      case 3:
-        _color1 = Colors.white;
-        _color2 = Colors.white;
-        _color3 = Colors.white;
-        _color4 = Color.fromRGBO(16, 30, 90, 1);
-        _color11 = Colors.transparent;
-        _color22 = Colors.transparent;
-        _color33 = Colors.transparent;
-        _color44 = Colors.white;
-        bloc.changePage('config');
-
-        return ConfigPage();
-        break;
-      default:
-        return HomePage();
-    }
-  }
-
-  Widget _buscarGrupos() {
-    return TextField(
-      keyboardType: TextInputType.text,
-      decoration: InputDecoration(
-        hintText: 'Search',
-        contentPadding: EdgeInsets.symmetric(vertical: 5),
-        filled: true,
-        fillColor: Colors.white,
-        border: OutlineInputBorder(
-            borderRadius: BorderRadius.only(
-                bottomRight: Radius.circular(20),
-                topRight: Radius.circular(20))),
-        prefixIcon: const Icon(
-          Icons.search,
-          color: Colors.black,
-        ),
-      ),
-      onTap: () {},
-    );
-  }
-
-  Widget _crearBotonLogin(BuildContext context) {
-    return Container(
-        height: 30,
-        width: 120,
-        child: ElevatedButton(
-          style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Colors.white)),
-          child: Center(
-            child: Text(
-              'Ingresar',
-              style: TextStyle(color: Colors.blue[900]),
+            // Anther sliver widget: SliverList
+            SliverList(
+              delegate: SliverChildListDelegate([_pageActual(context, bloc)]),
             ),
-          ),
-          onPressed: () {
-            Navigator.pushNamed(context, 'login');
-          },
+          ],
         ));
   }
 
-  Widget _crearBotonRegister(BuildContext context) {
-    return Container(
-        height: 30,
-        width: 150,
-        child: ElevatedButton(
-          style: ButtonStyle(
-              backgroundColor:
-                  MaterialStateProperty.all(azul20())),
-          child: Center(
-            child: Text('Crear cuenta'),
-          ),
-          onPressed: () {
-            Navigator.pushNamed(context, 'register');
-          },
-        ));
-  }
-
-  Widget _menuPop() {
-    return PopupMenuButton(
-        icon: Icon(
-          Icons.menu,
-          color: Colors.white,
-          size: 30,
-        ),
-        onSelected: (selectedValue) {
-          selectedValue
-              ? Navigator.pushNamed(context, 'register')
-              : Navigator.pushNamed(context, 'login');
-        },
-        itemBuilder: (BuildContext ctx) => [
-              PopupMenuItem(child: Text('Crear cuenta'), value: true),
-              PopupMenuItem(child: Text('Inicar Sesión'), value: false),
-            ]);
+  Widget _menuPop(
+    BuildContext context,
+  ) {
+    return StreamBuilder(
+        stream: auth.authStateChanges(),
+        builder: (context, AsyncSnapshot<User> snapshot) {
+          if (snapshot.hasData) {
+            return PopupMenuButton(
+                icon: Icon(
+                  Icons.menu,
+                  color: Colors.white,
+                  size: 30,
+                ),
+                onSelected: (selectedValue) {
+                  if(!selectedValue){
+                     print('entro');
+                    auth.signOut();
+                    Navigator.pushReplacementNamed(context, 'status');
+                  }else{
+                    
+                  }
+                 
+                },
+                itemBuilder: (BuildContext ctx) => [
+                      PopupMenuItem(
+                          child: Text(snapshot.data.displayName), value: true),
+                      PopupMenuItem(child: Text('Cerrar sesion'), value: false),
+                    ]);
+          }
+          return PopupMenuButton(
+              icon: Icon(
+                Icons.menu,
+                color: Colors.white,
+                size: 30,
+              ),
+              onSelected: (selectedValue) {
+                selectedValue
+                    ? Navigator.pushNamed(context, 'register')
+                    : Navigator.pushNamed(context, 'login');
+              },
+              itemBuilder: (BuildContext ctx) => [
+                    PopupMenuItem(child: Text('Crear cuenta'), value: true),
+                    PopupMenuItem(child: Text('Inicar Sesión'), value: false),
+                  ]);
+        });
   }
 
   Widget _authOptions() {
@@ -601,7 +282,7 @@ class _AppBarPageState extends State<AppBarPage> {
                             UsuarioProvider f = UsuarioProvider();
                             final bloc = Provider.of(context);
                             f.logout();
-                            Navigator.pushReplacementNamed(context, 'navegacion');
+                            Navigator.pushReplacementNamed(context, 'status');
                             bloc.changePage('home');
                           })
                     ],
@@ -612,11 +293,11 @@ class _AppBarPageState extends State<AppBarPage> {
           } else {
             return Row(
               children: [
-                _crearBotonLogin(context),
+                crearBotonLogin(context),
                 SizedBox(
                   width: 10,
                 ),
-                _crearBotonRegister(context),
+                crearBotonRegister(context),
                 SizedBox(
                   width: 10,
                 ),
@@ -624,5 +305,233 @@ class _AppBarPageState extends State<AppBarPage> {
             );
           }
         });
+  }
+}
+
+class NavegacionPageOff extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: azulOscuro(),
+        body: SingleChildScrollView(
+            child: Column(
+          children: [
+            layaout(context, _appbarWeb(context), _appbarWeb(context),
+                _appbarMobil(context)),
+            _pageHome(context)
+          ],
+        )));
+    //_appbarWeb(context);
+  }
+
+  Widget _appbarWeb(BuildContext context) {
+    return Container(
+      height: 60,
+      child: Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Image.asset(
+              'assets/ima7.png',
+              height: 45,
+            ),
+          ),
+          Container(
+            height: 40,
+            width: 250,
+            child: buscarGrupos(),
+          ),
+          Expanded(
+            child: Container(),
+          ),
+          Row(
+            children: [
+              crearBotonLogin(context),
+              SizedBox(
+                width: 10,
+              ),
+              crearBotonRegister(context),
+              SizedBox(
+                width: 10,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _appbarMobil(
+    BuildContext context,
+  ) {
+    return Container(
+      height: 60,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Image.asset(
+            'assets/ima7.png',
+            height: 45,
+          ),
+          Container(
+            height: 40,
+            width: MediaQuery.of(context).size.width * 0.6,
+            child: buscarGrupos(),
+          ),
+          _menuPop(
+            context,
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _pageHome(BuildContext context) {
+    return Container(
+        height: MediaQuery.of(context).size.height - 60, child: HomePageOff()
+
+        ///Container(color: Colors.red)
+        );
+  }
+
+  Widget _menuPop(
+    BuildContext context,
+  ) {
+    return PopupMenuButton(
+        icon: Icon(
+          Icons.menu,
+          color: Colors.white,
+          size: 30,
+        ),
+        onSelected: (selectedValue) {
+          selectedValue
+              ? Navigator.pushNamed(context, 'register')
+              : Navigator.pushNamed(context, 'login');
+        },
+        itemBuilder: (BuildContext ctx) => [
+              PopupMenuItem(child: Text('Crear cuenta'), value: true),
+              PopupMenuItem(child: Text('Inicar Sesión'), value: false),
+            ]);
+  }
+}
+
+class ItemsBar extends StatefulWidget {
+  @override
+  _ItemsBarState createState() => _ItemsBarState();
+}
+
+class _ItemsBarState extends State<ItemsBar> {
+  Color _color1 = Color.fromRGBO(16, 30, 90, 1);
+  Color _color2 = Colors.white;
+  Color _color3 = Colors.white;
+  Color _color4 = Colors.white;
+  Color _color11 = Colors.white;
+  Color _color22 = Colors.transparent;
+  Color _color33 = Colors.transparent;
+  Color _color44 = Colors.transparent;
+  @override
+  Widget build(BuildContext context) {
+    final bloc = Provider.of(context);
+    return Row(
+      children: [
+        ElevatedButton(
+            style: ButtonStyle(
+              elevation: MaterialStateProperty.all(0),
+              backgroundColor: MaterialStateProperty.all(_color11),
+            ),
+            child: Container(
+                height: 60,
+                width: 82,
+                child: Tooltip(
+                    message: 'Home',
+                    child: Icon(Icons.home, size: 30, color: _color1))),
+            onPressed: () {
+              setState(() {
+                _color1 = Color.fromRGBO(16, 30, 90, 1);
+                _color2 = Colors.white;
+                _color3 = Colors.white;
+                _color4 = Colors.white;
+                _color11 = Colors.white;
+                _color22 = Colors.transparent;
+                _color33 = Colors.transparent;
+                _color44 = Colors.transparent;
+                bloc.changePage('0');
+              });
+            }),
+        ElevatedButton(
+            style: ButtonStyle(
+              elevation: MaterialStateProperty.all(0),
+              backgroundColor: MaterialStateProperty.all(_color22),
+            ),
+            child: Container(
+                height: 60,
+                width: 82,
+                child: Tooltip(
+                    message: 'Personal',
+                    child: Icon(Icons.person_sharp, size: 30, color: _color2))),
+            onPressed: () {
+              setState(() {
+                _color1 = Colors.white;
+                _color2 = Color.fromRGBO(16, 30, 90, 1);
+                _color3 = Colors.white;
+                _color4 = Colors.white;
+                _color11 = Colors.transparent;
+                _color22 = Colors.white;
+                _color33 = Colors.transparent;
+                _color44 = Colors.transparent;
+                bloc.changePage('1');
+              });
+            }),
+        ElevatedButton(
+            style: ButtonStyle(
+              elevation: MaterialStateProperty.all(0),
+              backgroundColor: MaterialStateProperty.all(_color33),
+            ),
+            child: Container(
+                height: 60,
+                width: 82,
+                child: Tooltip(
+                    message: 'Help',
+                    child: Icon(Icons.help_center_rounded,
+                        size: 30, color: _color3))),
+            onPressed: () {
+              setState(() {
+                _color1 = Colors.white;
+                _color2 = Colors.white;
+                _color3 = Color.fromRGBO(16, 30, 90, 1);
+                _color4 = Colors.white;
+                _color11 = Colors.transparent;
+                _color22 = Colors.transparent;
+                _color33 = Colors.white;
+                _color44 = Colors.transparent;
+                bloc.changePage('2');
+              });
+            }),
+        ElevatedButton(
+            style: ButtonStyle(
+              elevation: MaterialStateProperty.all(0),
+              backgroundColor: MaterialStateProperty.all(_color44),
+            ),
+            child: Container(
+                height: 60,
+                width: 82,
+                child: Tooltip(
+                    message: 'Settings',
+                    child: Icon(Icons.settings, size: 30, color: _color4))),
+            onPressed: () {
+              setState(() {
+                _color1 = Colors.white;
+                _color2 = Colors.white;
+                _color3 = Colors.white;
+                _color4 = Color.fromRGBO(16, 30, 90, 1);
+                _color11 = Colors.transparent;
+                _color22 = Colors.transparent;
+                _color33 = Colors.transparent;
+                _color44 = Colors.white;
+                bloc.changePage('3');
+              });
+            }),
+      ],
+    );
   }
 }

@@ -369,7 +369,7 @@ class _RegisterPageState extends State<RegisterPage> {
         )),
       ),
       onPressed: () {
-        Navigator.pushNamed(context, 'login');
+        Navigator.popAndPushNamed(context, 'login');
       },
     );
   }
@@ -394,7 +394,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ? () {
                       if (_sel == true) {
                         _registerUser(bloc, context);
-                        bloc.changePage('home');
+                        bloc.changePage('0');
                       } else {
                         _errorCampos('Error terminos y condiciones');
                       }
@@ -410,7 +410,7 @@ class _RegisterPageState extends State<RegisterPage> {
         bloc.name, bloc.email, bloc.password, bloc.date);
 
     if (info['ok']) {
-      Navigator.pushNamed(context, 'navegacion');
+      Navigator.pop(context);
     } else {
       print(info['mensaje']);
       mostrarAlerta(context, info['mensaje']);

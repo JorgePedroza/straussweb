@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:straussweb/src/bloc/provider.dart';
@@ -5,6 +6,7 @@ import 'package:straussweb/src/routes/rutas.dart';
 
 Future<void> main() async {
   await Firebase.initializeApp();
+   await FirebaseAuth.instance.signOut();
   runApp(MyApp());
 }
 
@@ -15,7 +17,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Strauss',
-        initialRoute: 'navegacion',
+        initialRoute: 'status',
         routes: getRoutes(),
       ),
     );

@@ -49,6 +49,7 @@ BoxDecoration fondoDegrdado2() {
 }
 
 Future<void> mostrarAlerta(context, String message) async {
+
 return showDialog(
       context: context,
       barrierDismissible: true,
@@ -78,3 +79,75 @@ return showDialog(
 
     );
 }
+
+ Widget crearBotonLogin(BuildContext context) {
+    return Container(
+        height: 30,
+        width: 120,
+        child: ElevatedButton(
+          style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.white)),
+          child: Center(
+            child: Text(
+              'Ingresar',
+              style: TextStyle(color: Colors.blue[900]),
+            ),
+          ),
+          onPressed: () {
+            Navigator.pushNamed(context, 'login');
+          },
+        ));
+  }
+
+ Widget buscarGrupos() {
+    return TextField(
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+        hintText: 'Search',
+        contentPadding: EdgeInsets.symmetric(vertical: 5),
+        filled: true,
+        fillColor: Colors.white,
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.only(
+                bottomRight: Radius.circular(20),
+                topRight: Radius.circular(20))),
+        prefixIcon: const Icon(
+          Icons.search,
+          color: Colors.black,
+        ),
+      ),
+      onTap: () {},
+    );
+  }
+
+   Widget crearBotonRegister(BuildContext context) {
+    return Container(
+        height: 30,
+        width: 150,
+        child: ElevatedButton(
+          style: ButtonStyle(
+              backgroundColor:
+                  MaterialStateProperty.all(azul20())),
+          child: Center(
+            child: Text('Crear cuenta'),
+          ),
+          onPressed: () {
+            Navigator.pushNamed(context, 'register');
+          },
+        ));
+  }
+
+  Widget layaout(BuildContext context, Widget pageWeb,  Widget pageWeb2, Widget pageMobil,) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (constraints.maxWidth > 1300) {
+          return pageWeb;
+        }
+        if (constraints.maxWidth > 750) {
+          return pageWeb2;
+        } else {
+          return pageMobil;
+        }
+      },
+    );
+  }

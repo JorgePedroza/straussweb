@@ -83,8 +83,8 @@ class LoginPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Hero(
-                                          tag: 'strauss',
-                                          child: Image.asset(
+                      tag: 'strauss',
+                      child: Image.asset(
                         'assets/ima5.png',
                         width: 400,
                       ),
@@ -259,7 +259,7 @@ class LoginPage extends StatelessWidget {
               onPressed: () {
                 if (snapshot.hasData) {
                   _loginUser(bloc, context);
-                  bloc.changePage('home');
+                  bloc.changePage('0');
                 } else {
                   return null;
                 }
@@ -281,7 +281,7 @@ class LoginPage extends StatelessWidget {
         )),
       ),
       onPressed: () {
-        Navigator.pushNamed(context, 'register');
+        Navigator.popAndPushNamed(context, 'register');
       },
     );
   }
@@ -292,7 +292,7 @@ class LoginPage extends StatelessWidget {
     final info = await usuarioProvider.login(bloc.email, bloc.password);
 
     if (info['ok']) {
-      Navigator.pushNamed(context, 'navegacion');
+      Navigator.pop(context);
     } else {
       print(info['mensaje']);
       mostrarAlerta(context, info['mensaje']);

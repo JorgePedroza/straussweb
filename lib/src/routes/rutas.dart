@@ -5,6 +5,7 @@ import 'package:straussweb/src/pages/home_page.dart';
 import 'package:straussweb/src/pages/login_page.dart';
 import 'package:straussweb/src/pages/navegacion_page.dart';
 import 'package:straussweb/src/pages/register_page.dart';
+import 'package:straussweb/src/providers/statusUsuario.dart';
 
 
 
@@ -15,7 +16,8 @@ Map<String, WidgetBuilder> getRoutes() {
   "help":  (BuildContext context) => HelpPage(),
  "config":  (BuildContext context) => ConfigPage(),
  "navegacion":  (BuildContext context) => NavegacionPage(),
- "home":  (BuildContext context) => HomePage(),
+ "home":  (BuildContext context) => HomePageOff(),
+ 'status': (BuildContext context) => StatusUsuario()
   };
 }
 
