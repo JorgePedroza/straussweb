@@ -369,7 +369,7 @@ class _RegisterPageState extends State<RegisterPage> {
         )),
       ),
       onPressed: () {
-        Navigator.popAndPushNamed(context, 'login');
+        Navigator.pushNamed(context, 'login');
       },
     );
   }
@@ -410,7 +410,7 @@ class _RegisterPageState extends State<RegisterPage> {
         bloc.name, bloc.email, bloc.password, bloc.date);
 
     if (info['ok']) {
-      Navigator.pop(context);
+      Navigator.pushNamed(context,'register');
     } else {
       print(info['mensaje']);
       mostrarAlerta(context, info['mensaje']);

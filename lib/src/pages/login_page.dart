@@ -281,7 +281,7 @@ class LoginPage extends StatelessWidget {
         )),
       ),
       onPressed: () {
-        Navigator.popAndPushNamed(context, 'register');
+        Navigator.pushNamed(context, 'register');
       },
     );
   }
@@ -292,7 +292,7 @@ class LoginPage extends StatelessWidget {
     final info = await usuarioProvider.login(bloc.email, bloc.password);
 
     if (info['ok']) {
-      Navigator.pop(context);
+      Navigator.pushNamed(context,'status');
     } else {
       print(info['mensaje']);
       mostrarAlerta(context, info['mensaje']);
