@@ -79,19 +79,19 @@ class _HomePageOffState extends State<HomePageOff> {
                Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-                _cuadroImgen1('assets/img3.jpg', 100, 0, MediaQuery.of(context).size.width * 0.12, 700),
+                _cuadroImgen1('assets/img3.jpg', 100, 0, MediaQuery.of(context).size.width * 0.12, MediaQuery.of(context).size.height * 0.85,),
                 SizedBox(
                   width: 15,
                 ),
-                _cuadroImgen2('assets/imghome2.jpg', 0, 100, MediaQuery.of(context).size.width * 0.12, 700),
+                _cuadroImgen2('assets/imghome2.jpg', 0, 100, MediaQuery.of(context).size.width * 0.12, MediaQuery.of(context).size.height * 0.85),
                 SizedBox(
                   width: 15,
                 ),
-                _cuadroImgen3('assets/imghome3.jpg', 100, 0, MediaQuery.of(context).size.width * 0.12, 700),
+                _cuadroImgen3('assets/imghome3.jpg', 100, 0, MediaQuery.of(context).size.width * 0.12, MediaQuery.of(context).size.height * 0.85),
                 SizedBox(
                   width: 15,
                 ),
-                _cuadroImgen4('assets/imghom4.jpg', 0, 100, MediaQuery.of(context).size.width * 0.12, 700),
+                _cuadroImgen4('assets/imghom4.jpg', 0, 100, MediaQuery.of(context).size.width * 0.12, MediaQuery.of(context).size.height * 0.85),
                 SizedBox(
                   width: 15,
                 ),
@@ -137,15 +137,15 @@ class _HomePageOffState extends State<HomePageOff> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _cuadroImgen1('assets/img3.jpg', 100, 0, MediaQuery.of(context).size.width * 0.27, MediaQuery.of(context).size.height *0.6),
+              _cuadroImgen1('assets/img3.jpg', 100, 0, MediaQuery.of(context).size.width * 0.27, MediaQuery.of(context).size.height * 0.85),
               SizedBox(
                 width: 15,
               ),
-              _cuadroImgen2('assets/imghome2.jpg', 0, 100, MediaQuery.of(context).size.width * 0.27, MediaQuery.of(context).size.height *0.6),
+              _cuadroImgen2('assets/imghome2.jpg', 0, 100, MediaQuery.of(context).size.width * 0.27, MediaQuery.of(context).size.height * 0.85),
               SizedBox(
                 width: 15,
               ),
-              _cuadroImgen3('assets/imghome3.jpg', 100, 0, MediaQuery.of(context).size.width * 0.27, MediaQuery.of(context).size.height *0.6),
+              _cuadroImgen3('assets/imghome3.jpg', 100, 0, MediaQuery.of(context).size.width * 0.27, MediaQuery.of(context).size.height * 0.85),
               SizedBox(
                 width: 15,
               ),

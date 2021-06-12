@@ -6,182 +6,250 @@ import 'package:straussweb/src/widgets/widgets.dart';
 
 class LoginPage extends StatelessWidget {
   final usuarioProvider = new UsuarioProvider();
+  static double alto = 0;
   @override
   Widget build(BuildContext context) {
     final bloc = Provider.of(context);
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        if (constraints.maxWidth > 1200) {
-          return Scaffold(
-            body: Container(
-              decoration: fondoDegradado(),
-              child: _loginWeb(context, bloc),
-            ),
-          );
-        }
-        if (constraints.maxWidth > 700) {
-          return Scaffold(
-            body: Container(
-              decoration: fondoDegradado(),
-              child: _loginWeb(context, bloc),
-            ),
-          );
-        } else {
-          return Scaffold(
-              body: Container(
-            decoration: fondoDegradado(),
-            child: _loginMobil(context, bloc),
-          ));
-        }
-      },
-    );
+    
+ 
+    if(MediaQuery.of(context).size.height >= 670){
+      alto = MediaQuery.of(context).size.height * 0.8;
+     print(MediaQuery.of(context).size.height);
+    }else{
+      alto = 630;
+    }
+    return Scaffold(
+        body: Container(
+      width: double.infinity,
+      height: double.infinity,
+      decoration: fondoDegradado(),
+      child: layaout(
+          context,
+          _loginWeb(context, bloc,alto),
+          _loginWeb2(context, bloc),
+          Container(
+              width: double.infinity,
+              height: double.infinity,
+              color: azulOscuro(),
+              child: _loginMobil(context, bloc))),
+    ));
   }
 
-  Widget _loginWeb(BuildContext context, bloc) {
+  Widget _loginWeb(BuildContext context, bloc, alto) {
     return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Center(
-        widthFactor: 1.6,
-        child: Container(
-          height: 800,
-          width: 1200,
-          decoration: decorationBorderContianet(Colors.transparent),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                decoration: decorationBorderContianet(Colors.white),
-                height: 600,
-                width: 600,
-                child: Column(
+      child: 
+           Column(
+             children: [
+               SizedBox(height: MediaQuery.of(context).size.height * 0.03,),
+               Row(
+                 mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.03,
+                      ),
+                      Card(
+                        color: Colors.transparent,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          child: Container(
+                            decoration: decorationBorderContianet(Colors.white),
+                            height:500,
+                            width: 600,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 70),
+                                  child: Text(
+                                    'Iniciar Sesion',
+                                    style: TextStyle(fontSize: 30, color: azulOscuro()),
+                                  ),
+                                ),
+                               
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 50),
+                                  child: _campoCorreo(context, bloc),
+                                ),
+                                
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 20),
+                                  child: _campoContrasena(context, bloc),
+                                ),
+                                
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 70),
+                                  child: _bottonLogin(bloc),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Card(
+                        color: Colors.transparent,
+                        child: Container(
+                          decoration: decorationBorderContianet(azulOscuro()),
+                          height: alto,
+                          width: 600,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding:EdgeInsets.only(top: MediaQuery.of(context).size.height *0.1 ),
+                                child: Hero(
+                                  tag: 'strauss',
+                                  child: Image.asset(
+                                    'assets/ima5.png',
+                                    width: 400,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 50),
+                                child: Text(
+                                  'Magna commodo id eiusmod laboris cillum excepteur duis excepteur non fugiat magna elit labore proident.',
+                                  style: TextStyle(fontSize: 20, color: Colors.white),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 80),
+                                child: _bottonRegistrar(context),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+             ],
+           ),
+           
+          
+     
+    );
+  }
+  Widget _loginWeb2(BuildContext context, bloc) {
+    return SingleChildScrollView(
+      child: 
+           Column(
+             
+             children: [
+               SizedBox(height: MediaQuery.of(context).size.height * 0.03,),
+               Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      'Iniciar Sesion',
-                      style: TextStyle(fontSize: 30, color: azulOscuro()),
-                    ),
                     SizedBox(
-                      height: 40,
+                      width: MediaQuery.of(context).size.width * 0.03,
                     ),
-                    _campoCorreo(context, bloc),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    _campoContrasena(context, bloc),
-                    SizedBox(
-                      height: 110,
-                    ),
-                    _bottonLogin(bloc)
-                  ],
-                ),
-              ),
-              Container(
-                decoration: decorationBorderContianet(azulOscuro()),
-                height: 800,
-                width: 600,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Hero(
-                      tag: 'strauss',
-                      child: Image.asset(
-                        'assets/ima5.png',
-                        width: 400,
+                    Card(
+                      color: Colors.transparent,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Container(
+                          decoration: decorationBorderContianet(Colors.white),
+                          height:600,
+                          width: 600,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 70),
+                                child: Text(
+                                  'Iniciar Sesion',
+                                  style: TextStyle(fontSize: 30, color: azulOscuro()),
+                                ),
+                              ),
+                             
+                              Padding(
+                                padding: const EdgeInsets.only(top: 50),
+                                child: _campoCorreo(context, bloc),
+                              ),
+                              
+                              Padding(
+                                padding: const EdgeInsets.only(top: 20),
+                                child: _campoContrasena(context, bloc),
+                              ),
+                              
+                              Padding(
+                                padding: const EdgeInsets.only(top: 70),
+                                child: _bottonLogin(bloc),
+                              )
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                    SizedBox(
-                      height: 80,
-                    ),
-                    Container(
-                        width: 400,
-                        child: Text(
-                          'Magna commodo id eiusmod laboris cillum excepteur duis excepteur non fugiat magna elit labore proident.',
-                          style: TextStyle(fontSize: 20, color: Colors.white),
-                          textAlign: TextAlign.center,
-                        )),
-                    SizedBox(
-                      height: 60,
-                    ),
-                    _bottonRegistrar(context),
-                    SizedBox(
-                      height: 100,
-                    ),
+                    
                   ],
                 ),
-              ),
-            ],
-          ),
-        ),
-      ),
+             ],
+           ),
+        
+     
     );
   }
 
   Widget _loginMobil(BuildContext context, bloc) {
-    return SingleChildScrollView(
-      child: Stack(
-        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            color: azulOscuro(),
-            height: 500,
-            width: double.infinity,
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 20,
-                ),
-                Image.asset(
+    return CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          expandedHeight: 250,
+          backgroundColor: azulOscuro(),
+          elevation: 1,
+          pinned: false,
+          snap: false,
+          flexibleSpace: FlexibleSpaceBar(
+            background: Hero(
+              tag: 'strauss',
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Image.asset(
                   'assets/ima5.png',
-                  width: 400,
+                  width: MediaQuery.of(context).size.width * 0.9,
                 ),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                    width: 400,
-                    child: Text(
-                      'Magna commodo id eiusmod laboris cillum excepteur duis excepteur non fugiat magna elit labore proident.',
-                      style: TextStyle(fontSize: 20, color: Colors.white),
-                      textAlign: TextAlign.center,
-                    )),
-              ],
+              ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(
-              top: 350,
-            ),
-            child: Container(
+        ),
+
+        // Anther sliver widget: SliverList
+        SliverList(
+          delegate: SliverChildListDelegate([
+            Container(
               decoration: decorationBorderContianet(Colors.white),
               height: 800,
               width: double.infinity,
               child: Column(
                 children: [
                   SizedBox(
-                    height: 80,
+                    height: 20,
                   ),
                   Text(
                     'Iniciar Sesion',
                     style: TextStyle(fontSize: 30, color: azulOscuro()),
                   ),
                   SizedBox(
-                    height: 40,
-                  ),
-                  _campoCorreo(context, bloc),
-                  SizedBox(
                     height: 20,
                   ),
-                  _campoContrasena(context, bloc),
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: _campoCorreo(context, bloc),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: _campoContrasena(context, bloc),
+                  ),
                   SizedBox(
-                    height: 110,
+                    height: 60,
                   ),
                   _bottonLogin(bloc)
                 ],
               ),
-            ),
-          ),
-        ],
-      ),
+            )
+          ]),
+        ),
+      ],
     );
   }
 
@@ -197,7 +265,7 @@ class LoginPage extends StatelessWidget {
                   filled: true,
                   fillColor: Colors.white,
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   suffixIcon: Icon(
                     Icons.email,
@@ -224,7 +292,7 @@ class LoginPage extends StatelessWidget {
                   filled: true,
                   fillColor: Colors.white,
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   suffixIcon: Padding(
                     padding: EdgeInsetsDirectional.only(),
@@ -292,7 +360,8 @@ class LoginPage extends StatelessWidget {
     final info = await usuarioProvider.login(bloc.email, bloc.password);
 
     if (info['ok']) {
-      Navigator.pushNamed(context,'status');
+      Navigator.pop(context);
+      Navigator.popAndPushNamed(context, 'status');
     } else {
       print(info['mensaje']);
       mostrarAlerta(context, info['mensaje']);

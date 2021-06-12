@@ -129,12 +129,11 @@ class NavegacionPage extends StatelessWidget {
     return DefaultTabController(
         initialIndex: 0,
         length: 4,
-        child: CustomScrollView(
+        child: CustomScrollView( 
           slivers: [
             SliverAppBar(
               backgroundColor: azulOscuro(),
-              floating: true,
-              pinned: true,
+              pinned: false,
               snap: false,
               title: Row(
                 children: [
@@ -179,7 +178,10 @@ class NavegacionPage extends StatelessWidget {
               delegate: SliverChildListDelegate([_pageActual(context, bloc)]),
             ),
           ],
-        ));
+        )
+        
+        
+        );
   }
 
   Widget _menuPop(
@@ -190,6 +192,7 @@ class NavegacionPage extends StatelessWidget {
         builder: (context, AsyncSnapshot<User> snapshot) {
           if (snapshot.hasData) {
             return PopupMenuButton(
+
                 icon: Icon(
                   Icons.menu,
                   color: Colors.white,

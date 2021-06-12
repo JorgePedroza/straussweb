@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:straussweb/src/bloc/provider.dart';
 import 'package:straussweb/src/services/usuario_provider.dart';
-
 import 'package:straussweb/src/utils/colors_utils.dart';
 import 'package:straussweb/src/widgets/widgets.dart';
 
@@ -13,6 +12,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   bool _sel = false;
+  double alto = 0;
   TextEditingController _inputFieldDateController = new TextEditingController();
   final usuarioProvider = new UsuarioProvider();
 
@@ -21,58 +21,55 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     final bloc = Provider.of(context);
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        if (constraints.maxWidth > 1200) {
-          return Scaffold(
-            body: Container(
-              decoration: fondoDegradado(),
-              child: _loginWeb(bloc),
-            ),
-          );
-        }
-        if (constraints.maxWidth > 700) {
-          return Scaffold(
-            body: Container(
-              decoration: fondoDegradado(),
-              child: _loginWeb(bloc),
-            ),
-          );
-        } else {
-          return Scaffold(
-              body: Container(
-            decoration: fondoDegradado(),
-            child: _loginMobil(bloc),
-          ));
-        }
-      },
-    );
+
+    if (MediaQuery.of(context).size.height > 670) {
+      alto = MediaQuery.of(context).size.height * 0.8;
+    } else {
+      alto = 630;
+    }
+    return Scaffold(
+        body: Container(
+      width: double.infinity,
+      height: double.infinity,
+      decoration: fondoDegradado(),
+      child: layaout(context, _loginWeb(bloc, alto), _loginWeb2(bloc, alto),
+          Container(
+             width: double.infinity,
+      height: double.infinity,
+      color: Colors.white,
+            child: _loginMobil(bloc))),
+    ));
   }
 
-  Widget _loginWeb(bloc) {
+  Widget _loginWeb(bloc, alto) {
     return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Center(
-        widthFactor: 1.6,
-        child: Container(
-          height: 800,
-          width: 1200,
-          decoration: decorationBorderContianet(Colors.transparent),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
+        child: Column(
+      children: [
+        SizedBox(height: MediaQuery.of(context).size.width * 0.03),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.03,
+            ),
+            Card(
+              color: Colors.transparent,
+              child: Container(
                 decoration: decorationBorderContianet(Colors.white),
-                height: 700,
+                height: alto,
                 width: 600,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Hero(
-                      tag: 'strauss',
-                      child: Image.asset(
-                        'assets/ima6.png',
-                        width: 400,
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height * 0.1),
+                      child: Hero(
+                        tag: 'strauss',
+                        child: Image.asset(
+                          'assets/ima6.png',
+                          width: 400,
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -89,15 +86,16 @@ class _RegisterPageState extends State<RegisterPage> {
                       height: 60,
                     ),
                     _bottonLogin(),
-                    SizedBox(
-                      height: 100,
-                    ),
+                    Expanded(child: Container())
                   ],
                 ),
               ),
-              Container(
+            ),
+            Card(
+              color: Colors.transparent,
+              child: Container(
                 decoration: decorationBorderContianet(azulOscuro()),
-                height: 800,
+                height: 550,
                 width: 600,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -115,69 +113,131 @@ class _RegisterPageState extends State<RegisterPage> {
                   ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
-      ),
-    );
+      ],
+    ));
+  }
+
+  Widget _loginWeb2(bloc, alto) {
+    return SingleChildScrollView(
+        child: Column(
+      children: [
+        SizedBox(height: MediaQuery.of(context).size.width * 0.03),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.03,
+            ),
+            Card(
+              color: Colors.transparent,
+              child: Container(
+                decoration: decorationBorderContianet(azulOscuro()),
+                height: 600,
+                width: 600,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      'Crear cuenta',
+                      style: TextStyle(fontSize: 30, color: Colors.white),
+                    ),
+                    _campoNombre(context, bloc),
+                    _campoCorreo(context, bloc),
+                    _campoFecha(context, bloc),
+                    _campoContrasena(context, bloc),
+                    _checkTerminos(context),
+                    _bottonRegistrar(bloc)
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    ));
   }
 
   Widget _loginMobil(bloc) {
-    return SingleChildScrollView(
-      child: Stack(
-        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            color: Colors.white,
-            height: 600,
-            width: double.infinity,
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 20,
-                ),
-                Image.asset(
+    return CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          expandedHeight: 250,
+          backgroundColor:Colors.white,
+          elevation: 1,
+          pinned: false,
+          snap: false,
+          flexibleSpace: FlexibleSpaceBar(
+            background: Hero(
+              tag: 'strauss',
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Image.asset(
                   'assets/ima6.png',
-                  width: 400,
+                  width: MediaQuery.of(context).size.width * 0.9,
                 ),
-                SizedBox(
-                  height: 20,
-                ),
-                Container(
-                    width: 400,
-                    child: Text(
-                      'Magna commodo id eiusmod laboris cillum excepteur duis excepteur non fugiat magna elit labore proident.',
-                      style: TextStyle(fontSize: 20),
-                      textAlign: TextAlign.center,
-                    )),
-              ],
+              ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 350, bottom: 100),
-            child: Container(
-              decoration: decorationBorderContianet(azulOscuro()),
+        ),
+
+        // Anther sliver widget: SliverList
+        SliverList(
+          delegate: SliverChildListDelegate([
+            Container(
+              decoration: BoxDecoration(
+                color: 
+                azulOscuro(),
+                borderRadius: BorderRadius.only(
+                  
+                  topLeft: Radius.circular(10),topRight: Radius.circular(10))
+              ),
               height: 800,
               width: double.infinity,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
+                  SizedBox(
+                    height: 20,
+                  ),
                   Text(
                     'Crear cuenta',
                     style: TextStyle(fontSize: 30, color: Colors.white),
                   ),
-                  _campoNombre(context, bloc),
-                  _campoCorreo(context, bloc),
-                  _campoFecha(context, bloc),
-                  _campoContrasena(context, bloc),
-                  _checkTerminos(context),
-                  _bottonRegistrar(bloc)
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: _campoNombre(context, bloc),
+                  ),
+                  Padding(
+                     padding: const EdgeInsets.all(20.0),
+                    child: _campoCorreo(context, bloc),
+                  ),
+                  Padding(
+                     padding: const EdgeInsets.all(20.0),
+                    child: _campoFecha(context, bloc),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: _campoContrasena(context, bloc),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: _checkTerminos(context),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: _bottonRegistrar(bloc),
+                  )
                 ],
               ),
-            ),
-          ),
-        ],
-      ),
+            )
+          ]),
+        ),
+      ],
     );
   }
 
@@ -227,7 +287,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   filled: true,
                   fillColor: Colors.white,
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   suffixIcon: Icon(
                     Icons.person_rounded,
@@ -254,7 +314,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   filled: true,
                   fillColor: Colors.white,
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   suffixIcon: Icon(
                     Icons.email,
@@ -283,12 +343,13 @@ class _RegisterPageState extends State<RegisterPage> {
                 filled: true,
                 fillColor: Colors.white,
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 suffixIcon: Icon(
                   Icons.calendar_today_outlined,
                   color: azulOscuro(),
                 ), // myIcon is a 48px-wide widget.
+                
                 errorText: snapshot.error,
                 errorStyle: TextStyle(fontSize: 15),
                 hintText: 'mm/dd/yyyy',
@@ -312,8 +373,9 @@ class _RegisterPageState extends State<RegisterPage> {
     DateTime picked = await showDatePicker(
       context: context,
       initialDate: new DateTime.now(),
-      firstDate: new DateTime(2018),
-      lastDate: new DateTime(2025),
+      initialEntryMode: DatePickerEntryMode.input,
+      firstDate: new DateTime(1930),
+      lastDate: new DateTime(2022),
     );
 
     if (picked != null) {
@@ -337,7 +399,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   filled: true,
                   fillColor: Colors.white,
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                   suffixIcon: Padding(
                     padding: EdgeInsetsDirectional.only(),
@@ -410,7 +472,7 @@ class _RegisterPageState extends State<RegisterPage> {
         bloc.name, bloc.email, bloc.password, bloc.date);
 
     if (info['ok']) {
-      Navigator.pushNamed(context,'register');
+      Navigator.pushNamed(context, 'register');
     } else {
       print(info['mensaje']);
       mostrarAlerta(context, info['mensaje']);
