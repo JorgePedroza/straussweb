@@ -25,7 +25,7 @@ class _RegisterPageState extends State<RegisterPage> {
     if (MediaQuery.of(context).size.height > 670) {
       alto = MediaQuery.of(context).size.height * 0.8;
     } else {
-      alto = 630;
+      alto = 600;
     }
     return Scaffold(
         body: Container(
@@ -59,7 +59,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 height: alto,
                 width: 600,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Padding(
                       padding: EdgeInsets.only(
@@ -72,21 +72,22 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 80,
+                    
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: Container(
+                          child: Text(
+                            'Magna commodo id eiusmod laboris cillum excepteur duis excepteur non fugiat magna elit labore proident.',
+                            style: TextStyle(fontSize: 20),
+                            textAlign: TextAlign.center,
+                          )),
                     ),
-                    Container(
-                        width: 400,
-                        child: Text(
-                          'Magna commodo id eiusmod laboris cillum excepteur duis excepteur non fugiat magna elit labore proident.',
-                          style: TextStyle(fontSize: 20),
-                          textAlign: TextAlign.center,
-                        )),
-                    SizedBox(
-                      height: 60,
+                   
+                    Padding(
+                         padding: const EdgeInsets.only(top: 120),
+                      child: _bottonLogin(),
                     ),
-                    _bottonLogin(),
-                    Expanded(child: Container())
+                    
                   ],
                 ),
               ),
@@ -95,7 +96,7 @@ class _RegisterPageState extends State<RegisterPage> {
               color: Colors.transparent,
               child: Container(
                 decoration: decorationBorderContianet(azulOscuro()),
-                height: 550,
+                height: 570,
                 width: 600,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
