@@ -79,11 +79,11 @@ class PerfilPage extends StatelessWidget {
             onPressed: () async {
                 final bloc2 = Provider.of(context);
            
-             //   print(bloc.personal );
+          
           DocumentReference mypost =  FirebaseFirestore.instance.collection('mypost').doc(documentId);
 
           mypost.set(
-            {
+            { 'nombre' :  '$nombre',
               'portada':  '${bloc2.imageNetwork}',
               'subtitulo':'${ bloc2.subTitle}',
               'telefono': '${bloc2.telefono}',

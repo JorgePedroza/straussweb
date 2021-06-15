@@ -10,6 +10,7 @@ class LoginBloc with Validators {
   final _passwordController = BehaviorSubject<String>();
   final _dateController = BehaviorSubject<String>();
   final _pageController = BehaviorSubject<String>();
+  final _searchController = BehaviorSubject<bool>();
 
   //Controller formulario de perfil
    final _imagePortadaController = BehaviorSubject<String>();
@@ -30,6 +31,7 @@ class LoginBloc with Validators {
   Stream<String> get passwordStream => _passwordController.stream.transform( validarPassword );
   Stream<String> get dateStream => _dateController.transform( validarDate );
   Stream<String> get pageStream => _pageController.stream;
+   Stream<bool> get searchStream => _searchController.stream;
   
   //recuperar datos del formulario 
   Stream<String> get imagePortadaStream     => _imagePortadaController.stream;
@@ -59,6 +61,7 @@ class LoginBloc with Validators {
   Function(String) get changePassword => _passwordController.sink.add;
   Function(String) get changeDate => _dateController.sink.add;
   Function(String) get changePage => _pageController.sink.add;
+    Function(bool) get changeSearch => _searchController.sink.add;
 
  //Insertar datos del formulario 
  Function(String) get changeImageNetwork    => _imagePortadaController.sink.add;
@@ -79,6 +82,7 @@ class LoginBloc with Validators {
   String get password => _passwordController.value;
   String get date => _dateController.value;
   String get page => _pageController.value;
+  bool get search => _searchController.value;
 
   //Obtener datos del formulario 
   String get imageNetwork    => _imagePortadaController.value;
@@ -95,6 +99,8 @@ class LoginBloc with Validators {
 
 
   dispose() {
+    
+     _searchController?.close();
       _gruposController?.close();
       _instrumentoController?.close();
       _especialidadController?.close();

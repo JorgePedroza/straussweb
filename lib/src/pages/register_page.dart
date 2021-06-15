@@ -473,7 +473,7 @@ class _RegisterPageState extends State<RegisterPage> {
         bloc.name, bloc.email, bloc.password, bloc.date);
 
     if (info['ok']) {
-      Navigator.pushNamed(context, 'register');
+      Navigator.pushNamed(context, 'status');
     } else {
       print(info['mensaje']);
       mostrarAlerta(context, info['mensaje']);

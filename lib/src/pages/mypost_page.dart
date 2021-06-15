@@ -5,28 +5,13 @@ import 'package:straussweb/src/pages/perfil_page.dart';
 import 'package:straussweb/src/utils/colors_utils.dart';
 import 'dart:html' as html;
 
+import 'package:straussweb/src/widgets/widgets.dart';
+
 class MyPostPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    FirebaseAuth auth = FirebaseAuth.instance;
-
-    return Scaffold(
-      body: StreamBuilder<User>(
-          stream: auth.authStateChanges(),
-          builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
-            if (snapshot.hasData) {
-              return _streamMyPost(
-                  snapshot.data.uid, snapshot.data.displayName);
-            } else {
-              return Center(
-                  child: Container(
-                      child: _layout(
-                _sinUsuarioIniciado(),
-                _sinUsuarioIniciado(),
-              )));
-            }
-          }),
-    );
+    final g = FirebaseAuth.instance.currentUser;
+    return Scaffold(body: _streamMyPost(g.uid, g.displayName));
   }
 
   Widget _streamMyPost(String id, String nombre) {
@@ -36,40 +21,35 @@ class MyPostPage extends StatelessWidget {
         stream: _usersStream,
         builder:
             (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-          if (snapshot.hasError) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
               child: CircularProgressIndicator(),
             );
           }
-          print(snapshot.data.data().toString());
-          if (snapshot.data.data().toString() != '{initpost: initpost}') {
-            Map<String, dynamic> data = snapshot.data.data();
-            return Center(
-              child: Container(
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  child: _myPost(data, nombre)),
+
+          if (!snapshot.data.exists) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Container(
+                  height: 20,
+                ),
+                Text('Ya puedes comenzar a hacer tu perfil'),
+                Align(
+                    alignment: Alignment.bottomRight,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 20),
+                      child: _floatingButton(context, id, nombre),
+                    ))
+              ],
             );
           }
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Container(
-                height: 20,
-              ),
-              Text('Ya puedes comenzar a hacer tu perfil'),
-              Align(
-                  alignment: Alignment.bottomRight,
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 20),
-                    child: _floatingButton(context, id, nombre),
-                  ))
-            ],
+
+          Map<String, dynamic> data = snapshot.data.data();
+          return Center(
+            child: Container(
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: _myPost(data, nombre)),
           );
         });
   }
@@ -87,27 +67,6 @@ class MyPostPage extends StatelessWidget {
         });
   }
 
-  Widget _sinUsuarioIniciado() {
-    return Center(
-      child: Text('Aqui podras poner tu perfil, pero antes inicia sesion.'),
-    );
-  }
-
-  Widget _layout(Widget pageWeb, Widget pageMobil) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        if (constraints.maxWidth > 1300) {
-          return pageWeb;
-        }
-        if (constraints.maxWidth > 750) {
-          return pageWeb;
-        } else {
-          return pageMobil;
-        }
-      },
-    );
-  }
-
   Widget _myPost(Map<String, dynamic> data, nombre) {
     return Card(
       child: Container(
@@ -122,7 +81,7 @@ class MyPostPage extends StatelessWidget {
                     Container(
                         width: double.infinity,
                         height: 550,
-                        child: _imagePortada(data['portada'])),
+                        child: imagePortada(data['portada'])),
                     Padding(
                       padding:
                           const EdgeInsets.only(top: 400, left: 20, right: 20),
@@ -137,7 +96,7 @@ class MyPostPage extends StatelessWidget {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(30.0),
                               child: FadeInImage(
-                                image: _imageNetwork(),
+                                image: imageNetwork(),
                                 placeholder: AssetImage('assets/loading.gif'),
                                 fadeInDuration: Duration(milliseconds: 200),
                                 width: 200,
@@ -392,58 +351,6 @@ class MyPostPage extends StatelessWidget {
           )),
     );
   }
-
-  Widget _imagePortada(String img) {
-    switch (img) {
-      case '1':
-        return FadeInImage(
-          image: NetworkImage(
-              'https://static2.abc.es/media/cultura/2019/09/26/beatlesss-kY2D--620x349@abc.jpg'),
-          placeholder: AssetImage('assets/loading.gif'),
-          fadeInDuration: Duration(milliseconds: 200),
-          fit: BoxFit.fitWidth,
-        );
-        break;
-      case '2':
-        return FadeInImage(
-          image: NetworkImage(
-              'https://www.anahuac.mx/veracruz/sites/default/files/2019-11/concierto-orquesta-filarmonica-xalapa_fbtw.jpg'),
-          placeholder: AssetImage('assets/loading.gif'),
-          fadeInDuration: Duration(milliseconds: 200),
-          fit: BoxFit.fitWidth,
-        );
-        break;
-      case '3':
-        return FadeInImage(
-          image: NetworkImage(
-              'https://ep00.epimg.net/cultura/imagenes/2016/01/04/actualidad/1451873486_818047_1451874168_noticia_normal.jpg'),
-          placeholder: AssetImage('assets/loading.gif'),
-          fadeInDuration: Duration(milliseconds: 200),
-          fit: BoxFit.fitWidth,
-        );
-        break;
-      case '4':
-        return FadeInImage(
-          image: NetworkImage(
-              'https://www.musicalesyeventosanha.com/blog/wp-content/uploads/2014/01/Tenor-violinista-y-organista-en-boda-religiosa.jpg'),
-          placeholder: AssetImage('assets/loading.gif'),
-          fadeInDuration: Duration(milliseconds: 200),
-          fit: BoxFit.fitWidth,
-        );
-
-      default:
-        return FadeInImage(
-          image: NetworkImage(
-              'https://static.photocdn.pt/images/articles/2017_1/iStock-545347988.jpg'),
-          placeholder: AssetImage('assets/loading.gif'),
-          fadeInDuration: Duration(milliseconds: 200),
-          fit: BoxFit.fitWidth,
-        );
-    }
-  }
 }
 
-_imageNetwork() {
-  return NetworkImage(
-      'https://static.photocdn.pt/images/articles/2017_1/iStock-545347988.jpg');
-}
+

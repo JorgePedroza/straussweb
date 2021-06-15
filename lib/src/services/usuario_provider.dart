@@ -21,8 +21,8 @@ class UsuarioProvider {
   
     try {
      final g = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
-       print(g.user.uid);
-       _createPost(g.user.uid);
+       
+      // _createPost(g.user.uid);
       await g.user.updateDisplayName(nombre);
       DocumentReference userRef = FirebaseFirestore.instance.collection('usuarios').doc();
 
@@ -41,13 +41,6 @@ class UsuarioProvider {
     }
   }
 
-_createPost(String id) {
-    DocumentReference mypost = FirebaseFirestore.instance.collection('mypost').doc(id);
-    mypost.set({
-      'initpost':'initpost'
-    });
-    
-  }
 
   void logout() async {
     await FirebaseAuth.instance.signOut();

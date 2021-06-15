@@ -14,7 +14,7 @@ class LoginPage extends StatelessWidget {
  
     if(MediaQuery.of(context).size.height >= 670){
       alto = MediaQuery.of(context).size.height * 0.8;
-     print(MediaQuery.of(context).size.height);
+    
     }else{
       alto = 630;
     }
@@ -355,13 +355,12 @@ class LoginPage extends StatelessWidget {
   }
 
   _loginUser(bloc, BuildContext context) async {
-    print('entro');
+    
 
     final info = await usuarioProvider.login(bloc.email, bloc.password);
 
     if (info['ok']) {
-      Navigator.pop(context);
-      Navigator.popAndPushNamed(context, 'status');
+      Navigator.pushNamed(context, 'status');
     } else {
       print(info['mensaje']);
       mostrarAlerta(context, info['mensaje']);

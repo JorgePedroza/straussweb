@@ -1,6 +1,8 @@
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:straussweb/src/utils/colors_utils.dart';
 import 'package:straussweb/src/widgets/widgets.dart';
@@ -18,36 +20,41 @@ class _HomePageOffState extends State<HomePageOff> {
   bool _visible4 = true;
 
   FirebaseAuth auth = FirebaseAuth.instance;
-  void _loadData() async {
+  _loadData() async {
     await Future.delayed(Duration(milliseconds: 2500));
+    if (!mounted) return;
     setState(() {
       _visible = false;
     });
   }
 
-  void _loadData1() async {
+  _loadData1() async {
     await Future.delayed(Duration(milliseconds: 1000));
+    if (!mounted) return;
     setState(() {
       _visible1 = false;
     });
   }
 
-  void _loadData2() async {
+  _loadData2() async {
     await Future.delayed(Duration(milliseconds: 500));
+    if (!mounted) return;
     setState(() {
       _visible2 = false;
     });
   }
 
-  void _loadData3() async {
+  _loadData3() async {
     await Future.delayed(Duration(milliseconds: 2000));
+    if (!mounted) return;
     setState(() {
       _visible3 = false;
     });
   }
 
-  void _loadData4() async {
+  _loadData4() async {
     await Future.delayed(Duration(milliseconds: 1500));
+    if (!mounted) return;
     setState(() {
       _visible4 = false;
     });
@@ -73,63 +80,86 @@ class _HomePageOffState extends State<HomePageOff> {
 
   Widget _pageWeb() {
     return SingleChildScrollView(
-           child:Column(
-             children: [
-               Container(height:20,),
-               Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-                _cuadroImgen1('assets/img3.jpg', 100, 0, MediaQuery.of(context).size.width * 0.12, MediaQuery.of(context).size.height * 0.85,),
-                SizedBox(
-                  width: 15,
-                ),
-                _cuadroImgen2('assets/imghome2.jpg', 0, 100, MediaQuery.of(context).size.width * 0.12, MediaQuery.of(context).size.height * 0.85),
-                SizedBox(
-                  width: 15,
-                ),
-                _cuadroImgen3('assets/imghome3.jpg', 100, 0, MediaQuery.of(context).size.width * 0.12, MediaQuery.of(context).size.height * 0.85),
-                SizedBox(
-                  width: 15,
-                ),
-                _cuadroImgen4('assets/imghom4.jpg', 0, 100, MediaQuery.of(context).size.width * 0.12, MediaQuery.of(context).size.height * 0.85),
-                SizedBox(
-                  width: 15,
-                ),
-                AnimatedOpacity(
-                  opacity: _visible ? 0.0 : 1,
-                  duration: Duration(seconds: 2),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Hero(
-                        tag: 'strauss',
-                        child: Image.asset(
-                          'assets/ima5.png',
-                          width: MediaQuery.of(context).size.width * 0.35,
-                        ),
+      child: Column(
+        children: [
+          Container(
+            height: 20,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _cuadroImgen1(
+                'assets/img3.jpg',
+                100,
+                0,
+                MediaQuery.of(context).size.width * 0.12,
+                MediaQuery.of(context).size.height * 0.85,
+              ),
+              SizedBox(
+                width: 15,
+              ),
+              _cuadroImgen2(
+                  'assets/imghome2.jpg',
+                  0,
+                  100,
+                  MediaQuery.of(context).size.width * 0.12,
+                  MediaQuery.of(context).size.height * 0.85),
+              SizedBox(
+                width: 15,
+              ),
+              _cuadroImgen3(
+                  'assets/imghome3.jpg',
+                  100,
+                  0,
+                  MediaQuery.of(context).size.width * 0.12,
+                  MediaQuery.of(context).size.height * 0.85),
+              SizedBox(
+                width: 15,
+              ),
+              _cuadroImgen4(
+                  'assets/imghom4.jpg',
+                  0,
+                  100,
+                  MediaQuery.of(context).size.width * 0.12,
+                  MediaQuery.of(context).size.height * 0.85),
+              SizedBox(
+                width: 15,
+              ),
+              AnimatedOpacity(
+                opacity: _visible ? 0.0 : 1,
+                duration: Duration(seconds: 2),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Hero(
+                      tag: 'strauss',
+                      child: Image.asset(
+                        'assets/ima5.png',
+                        width: MediaQuery.of(context).size.width * 0.35,
                       ),
-                      SizedBox(
-                        height: 60,
+                    ),
+                    SizedBox(
+                      height: 60,
+                    ),
+                    Container(
+                      width: 500,
+                      child: SelectableText(
+                        'Ipsum enim dolor reprehenderit culpa occaecat non deserunt reprehenderit sunt.Pariatur eiusmod proident sint tempor magna mollit dolore aliqua consequat do veniam.Velit ipsum culpa esse velit labore minim irure labore non.',
+                        style: TextStyle(color: Colors.white),
+                        textAlign: TextAlign.justify,
                       ),
-                      Container(
-                        width: 500,
-                        child: SelectableText(
-                          'Ipsum enim dolor reprehenderit culpa occaecat non deserunt reprehenderit sunt.Pariatur eiusmod proident sint tempor magna mollit dolore aliqua consequat do veniam.Velit ipsum culpa esse velit labore minim irure labore non.',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.justify,
-                        ),
-                      )
-                    ],
-                  ),
-                )
-          ],
-        ),
-             ],
-           ),
-      
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+        ],
+      ),
     );
   }
+
   Widget _pageWeb2() {
     return SingleChildScrollView(
       child: Column(
@@ -137,19 +167,33 @@ class _HomePageOffState extends State<HomePageOff> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _cuadroImgen1('assets/img3.jpg', 100, 0, MediaQuery.of(context).size.width * 0.27, MediaQuery.of(context).size.height * 0.85),
+              _cuadroImgen1(
+                  'assets/img3.jpg',
+                  100,
+                  0,
+                  MediaQuery.of(context).size.width * 0.27,
+                  MediaQuery.of(context).size.height * 0.85),
               SizedBox(
                 width: 15,
               ),
-              _cuadroImgen2('assets/imghome2.jpg', 0, 100, MediaQuery.of(context).size.width * 0.27, MediaQuery.of(context).size.height * 0.85),
+              _cuadroImgen2(
+                  'assets/imghome2.jpg',
+                  0,
+                  100,
+                  MediaQuery.of(context).size.width * 0.27,
+                  MediaQuery.of(context).size.height * 0.85),
               SizedBox(
                 width: 15,
               ),
-              _cuadroImgen3('assets/imghome3.jpg', 100, 0, MediaQuery.of(context).size.width * 0.27, MediaQuery.of(context).size.height * 0.85),
+              _cuadroImgen3(
+                  'assets/imghome3.jpg',
+                  100,
+                  0,
+                  MediaQuery.of(context).size.width * 0.27,
+                  MediaQuery.of(context).size.height * 0.85),
               SizedBox(
                 width: 15,
               ),
-             
             ],
           ),
           AnimatedOpacity(
@@ -187,7 +231,6 @@ class _HomePageOffState extends State<HomePageOff> {
       ),
     );
   }
-
 
   Widget _pageMobil() {
     return SingleChildScrollView(
@@ -196,19 +239,33 @@ class _HomePageOffState extends State<HomePageOff> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _cuadroImgen1('assets/img3.jpg', 100, 0, MediaQuery.of(context).size.width * 0.27, MediaQuery.of(context).size.height *0.6),
+              _cuadroImgen1(
+                  'assets/img3.jpg',
+                  100,
+                  0,
+                  MediaQuery.of(context).size.width * 0.27,
+                  MediaQuery.of(context).size.height * 0.6),
               SizedBox(
                 width: 15,
               ),
-              _cuadroImgen2('assets/imghome2.jpg', 0, 100, MediaQuery.of(context).size.width * 0.27, MediaQuery.of(context).size.height *0.6),
+              _cuadroImgen2(
+                  'assets/imghome2.jpg',
+                  0,
+                  100,
+                  MediaQuery.of(context).size.width * 0.27,
+                  MediaQuery.of(context).size.height * 0.6),
               SizedBox(
                 width: 15,
               ),
-              _cuadroImgen3('assets/imghome3.jpg', 100, 0, MediaQuery.of(context).size.width * 0.27, MediaQuery.of(context).size.height *0.6),
+              _cuadroImgen3(
+                  'assets/imghome3.jpg',
+                  100,
+                  0,
+                  MediaQuery.of(context).size.width * 0.27,
+                  MediaQuery.of(context).size.height * 0.6),
               SizedBox(
                 width: 15,
               ),
-             
             ],
           ),
           AnimatedOpacity(
@@ -247,7 +304,8 @@ class _HomePageOffState extends State<HomePageOff> {
     );
   }
 
-  Widget _cuadroImgen1(String path, double top, double bottom, double width, double height) {
+  Widget _cuadroImgen1(
+      String path, double top, double bottom, double width, double height) {
     return AnimatedOpacity(
         // Si el Widget debe ser visible, anime a 1.0 (completamente visible). Si
         // el Widget debe estar oculto, anime a 0.0 (invisible).
@@ -264,7 +322,8 @@ class _HomePageOffState extends State<HomePageOff> {
             )));
   }
 
-  Widget _cuadroImgen2(String path, double top, double bottom, double width, double height) {
+  Widget _cuadroImgen2(
+      String path, double top, double bottom, double width, double height) {
     return AnimatedOpacity(
         // Si el Widget debe ser visible, anime a 1.0 (completamente visible). Si
         // el Widget debe estar oculto, anime a 0.0 (invisible).
@@ -281,7 +340,8 @@ class _HomePageOffState extends State<HomePageOff> {
             )));
   }
 
-  Widget _cuadroImgen3(String path, double top, double bottom, double width, double height) {
+  Widget _cuadroImgen3(
+      String path, double top, double bottom, double width, double height) {
     return AnimatedOpacity(
         // Si el Widget debe ser visible, anime a 1.0 (completamente visible). Si
         // el Widget debe estar oculto, anime a 0.0 (invisible).
@@ -298,7 +358,8 @@ class _HomePageOffState extends State<HomePageOff> {
             )));
   }
 
-  Widget _cuadroImgen4(String path, double top, double bottom, double width, double height) {
+  Widget _cuadroImgen4(
+      String path, double top, double bottom, double width, double height) {
     return AnimatedOpacity(
         // Si el Widget debe ser visible, anime a 1.0 (completamente visible). Si
         // el Widget debe estar oculto, anime a 0.0 (invisible).
@@ -317,8 +378,132 @@ class _HomePageOffState extends State<HomePageOff> {
 }
 
 class HomePage extends StatelessWidget {
+  double alto;
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    final Stream<QuerySnapshot> _usersStream =
+        FirebaseFirestore.instance.collection('mypost').snapshots();
+
+    if(MediaQuery.of(context).size.height >= 920){
+      alto = MediaQuery.of(context).size.height * 0.4;
+    
+    }else{
+      alto = 430;
+    }
+    return Scaffold(
+      backgroundColor: Color.fromRGBO(228, 230, 232, 1),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: _usersStream,
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return Text('Something went wrong');
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          return new ListView(
+            children: snapshot.data.docs.map((QueryDocumentSnapshot document) {
+              Map<String, dynamic> data =
+                  document.data() as Map<String, dynamic>;
+
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    height: alto,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Stack(
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                                right: MediaQuery.of(context).size.width * 0.3 +
+                                    10,
+                                left: 10),
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: CircleAvatar(
+                                      backgroundImage: NetworkImage(
+                                          'https://static.photocdn.pt/images/articles/2017_1/iStock-545347988.jpg'),
+                                      radius: 70),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: ListTile(
+                                    title: Text(data["nombre"]),
+                                    subtitle: Text(data["subtitulo"]),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: ElevatedButton(
+                                      onPressed: () {},
+                                      child: Center(child: Text('facebook'))),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 0.3,
+                            decoration: BoxDecoration(
+                                color: azulOscuro(),
+                                borderRadius: BorderRadius.circular(10)),
+                              child: ListView(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(25.0),
+                                    child: Text("Informacion General", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, ),),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+                                    child: Text(data["general"], style: TextStyle(color: Colors.white),),
+                                  ),
+                                  //Expanded(child: Container()),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical: 20, horizontal: MediaQuery.of(context).size.width *0.1 ),
+                                    child: ElevatedButton(
+                                    child: Center(child: Text('Ver perfil'),),
+                                    onPressed: (){},
+                                    ),
+                                  )
+
+                                ],
+                              ),
+                          ),
+                        ),
+
+                        //  Text(data['nombre']),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  )
+                ],
+              );
+            }).toList(),
+          );
+        },
+      ),
+    );
   }
 }

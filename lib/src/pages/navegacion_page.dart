@@ -19,16 +19,16 @@ class NavegacionPage extends StatelessWidget {
       backgroundColor: azulOscuro(),
       body: layaout(
           context,
-          Column(
+          Stack(
             children: [
-              appBarWeb(),
               _pageActual(context, bloc),
+              appBarWeb(context),
             ],
           ),
-          Column(
+          Stack(
             children: [
-              appBarWeb2(),
               _pageActual(context, bloc),
+              appBarWeb2(context),
             ],
           ),
           appBarMobil(context, bloc)),
@@ -36,91 +36,97 @@ class NavegacionPage extends StatelessWidget {
   }
 
   Widget _pageActual(BuildContext context, bloc) {
-    return Container(
-      height: MediaQuery.of(context).size.height - 60,
-      child: StreamBuilder(
-        stream: bloc.pageStream,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          switch (snapshot.data.toString()) {
-            case '0':
-              return HomePage();
-              break;
-            case '1':
-              return MyPostPage();
-              break;
-            case '2':
-              return HelpPage();
-              break;
-            case '3':
-              return ConfigPage();
-              break;
-            default:
-              return HomePageOff();
-              break;
-          }
-        },
-      ),
+    return Column(
+      children: [
+        Container(
+          height: 60,
+        ),
+        Container(
+          height: MediaQuery.of(context).size.height - 60,
+          child: StreamBuilder(
+            stream: bloc.pageStream,
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              switch (snapshot.data.toString()) {
+                case '0':
+                  return HomePage();
+                  break;
+                case '1':
+                  return MyPostPage();
+                  break;
+                case '2':
+                  return HelpPage();
+                  break;
+                case '3':
+                  return ConfigPage();
+                  break;
+                default:
+                  return HomePageOff();
+                  break;
+              }
+            },
+          ),
+        ),
+      ],
     );
   }
 
-  Widget appBarWeb() {
-    return Container(
-      height: 60,
-      width: double.infinity,
-      child: Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Image.asset(
-              'assets/ima7.png',
-              height: 45,
-            ),
+  Widget appBarWeb(BuildContext context) {
+    return Row(
+     crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5 ),
+          child: Image.asset(
+            'assets/ima7.png',
+            height: 45,
           ),
-          Container(
-            height: 40,
-            width: 250,
-            child: buscarGrupos(),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 5),
+          child: streamBusqueda(context),
+        ),
+        Expanded(
+          child: Container(
+            height: 60,
           ),
-          Expanded(
-            child: Container(),
+        ),
+        ItemsBar(),
+        Expanded(
+          child: Container(
+            height: 60,
           ),
-          ItemsBar(),
-          Expanded(
-            child: Container(),
-          ),
-          _authOptions()
-        ],
-      ),
+        ),
+        Padding(
+           padding: const EdgeInsets.only(top: 10),
+          child: _authOptions(),
+        )
+      ],
     );
   }
 
-  Widget appBarWeb2() {
-    return Container(
-      height: 60,
-      width: double.infinity,
-      child: Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Image.asset(
-              'assets/ima7.png',
-              height: 45,
-            ),
+  Widget appBarWeb2(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+          child: Image.asset(
+            'assets/ima7.png',
+            height: 45,
           ),
-          Container(
-            height: 40,
-            width: 250,
-            child: buscarGrupos(),
-          ),
-          Expanded(
-            child: Container(),
-          ),
-          ItemsBar(),
-          Expanded(
-            child: Container(),
-          ),
-        ],
-      ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 5),
+          child: streamBusqueda(context),
+        ),
+        Expanded(
+          child: Container(),
+        ),
+        ItemsBar(),
+        Expanded(
+          child: Container(),
+        ),
+      ],
     );
   }
 
@@ -128,7 +134,7 @@ class NavegacionPage extends StatelessWidget {
     return DefaultTabController(
         initialIndex: 0,
         length: 4,
-        child: CustomScrollView( 
+        child: CustomScrollView(
           slivers: [
             SliverAppBar(
               backgroundColor: azulOscuro(),
@@ -146,7 +152,7 @@ class NavegacionPage extends StatelessWidget {
                   Container(
                     height: 40,
                     width: MediaQuery.of(context).size.width * 0.6,
-                    child: buscarGrupos(),
+                    child: buscarGrupos(context),
                   ),
                   _menuPop(context)
                 ],
@@ -177,35 +183,26 @@ class NavegacionPage extends StatelessWidget {
               delegate: SliverChildListDelegate([_pageActual(context, bloc)]),
             ),
           ],
-        )
-        
-        
-        );
+        ));
   }
 
-  Widget _menuPop(
-    BuildContext context,
-  ) {
+  Widget _menuPop(BuildContext context) {
     return StreamBuilder(
         stream: auth.authStateChanges(),
         builder: (context, AsyncSnapshot<User> snapshot) {
           if (snapshot.hasData) {
             return PopupMenuButton(
-
                 icon: Icon(
                   Icons.menu,
                   color: Colors.white,
                   size: 30,
                 ),
                 onSelected: (selectedValue) {
-                  if(!selectedValue){
-                     print('entro');
+                  if (!selectedValue) {
+                    
                     auth.signOut();
                     Navigator.pushReplacementNamed(context, 'status');
-                  }else{
-                    
-                  }
-                 
+                  } else {}
                 },
                 itemBuilder: (BuildContext ctx) => [
                       PopupMenuItem(
@@ -313,23 +310,28 @@ class NavegacionPage extends StatelessWidget {
 class NavegacionPageOff extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final bloc = Provider.of(context);
+
     return Scaffold(
         backgroundColor: azulOscuro(),
         body: SingleChildScrollView(
-            child: Column(
-          children: [
-            layaout(context, _appbarWeb(context), _appbarWeb(context),
-                _appbarMobil(context)),
-            _pageHome(context)
-          ],
-        )));
-    //_appbarWeb(context);
+          child: Stack(
+            children: [
+              _pageHome(context),
+               layaout(context,
+                  _appbarWeb(context, bloc),
+                  _appbarWeb(context, bloc), 
+                  _appbarMobil(context)),
+            ],
+          ),
+        ));
   }
 
-  Widget _appbarWeb(BuildContext context) {
-    return Container(
-      height: 60,
+  Widget _appbarWeb(BuildContext context, bloc) {
+    return Padding(
+      padding: EdgeInsets.only(top: 10),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -338,11 +340,7 @@ class NavegacionPageOff extends StatelessWidget {
               height: 45,
             ),
           ),
-          Container(
-            height: 40,
-            width: 250,
-            child: buscarGrupos(),
-          ),
+          streamBusqueda(context),
           Expanded(
             child: Container(),
           ),
@@ -363,23 +361,20 @@ class NavegacionPageOff extends StatelessWidget {
     );
   }
 
-  Widget _appbarMobil(
-    BuildContext context,
-  ) {
-    return Container(
-      height: 60,
+  Widget _appbarMobil(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Image.asset(
             'assets/ima7.png',
             height: 45,
           ),
           Container(
-            height: 40,
-            width: MediaQuery.of(context).size.width * 0.6,
-            child: buscarGrupos(),
-          ),
+              width: MediaQuery.of(context).size.width * 0.6,
+              child: streamBusqueda(context)),
           _menuPop(
             context,
           )
@@ -389,16 +384,18 @@ class NavegacionPageOff extends StatelessWidget {
   }
 
   Widget _pageHome(BuildContext context) {
-    return Container(
-        height: MediaQuery.of(context).size.height - 60, child: HomePageOff()
-
-        ///Container(color: Colors.red)
-        );
+    return Column(
+      children: [
+        Container(height: 60),
+        Container(
+            height: MediaQuery.of(context).size.height - 60,
+            child: HomePage()
+            ),
+      ],
+    );
   }
 
-  Widget _menuPop(
-    BuildContext context,
-  ) {
+  Widget _menuPop(BuildContext context) {
     return PopupMenuButton(
         icon: Icon(
           Icons.menu,
