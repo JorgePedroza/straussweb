@@ -385,7 +385,6 @@ class PerfilPage extends StatelessWidget {
 
     return StreamBuilder(
         stream: bloc.imagePortadaStream,
-      
         builder: (context, snapshot) {
           switch (bloc.imageNetwork) {
             case '1':

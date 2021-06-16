@@ -109,7 +109,7 @@ Widget streamBusqueda(context) {
                               .then((QuerySnapshot querySnapshot) {
                             querySnapshot.docs.forEach((doc) {
                               Map<String, dynamic> data =  doc.data() as Map<String, dynamic>;
-                              print(data["telefono"]);
+                           
                             });
                           });
  
