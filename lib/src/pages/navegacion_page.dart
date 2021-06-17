@@ -389,7 +389,7 @@ class NavegacionPageOff extends StatelessWidget {
         Container(height: 60),
         Container(
             height: MediaQuery.of(context).size.height - 60,
-            child: HomePage()
+            child: HomePageOff()
             ),
       ],
     );

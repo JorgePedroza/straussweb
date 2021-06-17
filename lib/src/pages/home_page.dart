@@ -380,6 +380,8 @@ class _HomePageOffState extends State<HomePageOff> {
 
 class HomePage extends StatelessWidget {
   double alto;
+  double ancho;
+  double ancho2;
   @override
   Widget build(BuildContext context) {
     final Stream<QuerySnapshot> _usersStream =
@@ -390,12 +392,25 @@ class HomePage extends StatelessWidget {
     } else {
       alto = 430;
     }
+    if (MediaQuery.of(context).size.width > 900) {
+      print(MediaQuery.of(context).size.width);
+      ancho = MediaQuery.of(context).size.width * 0.8;
+    } else {
+      print('------------');
+      ancho = 900;
+    }
+    if (MediaQuery.of(context).size.width > 1200) {
+      print(MediaQuery.of(context).size.width);
+      ancho2 = MediaQuery.of(context).size.width * 0.8;
+    } else {
+      print('------------');
+      ancho2 = 1200;
+    }
     return Scaffold(
       backgroundColor: Color.fromRGBO(228, 230, 232, 1),
       body: StreamBuilder<QuerySnapshot>(
         stream: _usersStream,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-         
           if (snapshot.hasError) {
             return Text('Something went wrong');
           }
@@ -406,92 +421,101 @@ class HomePage extends StatelessWidget {
             );
           }
           List<Map<String, dynamic>> list = [];
-            
-           snapshot.data.docs.map((QueryDocumentSnapshot document){
+
+          snapshot.data.docs.map((QueryDocumentSnapshot document) {
             Map<String, dynamic> data = document.data() as Map<String, dynamic>;
-              list.add(data);
-           }).toList();
-           print(list[1]['nombre']);
-          return Center(
+            list.add(data);
+          }).toList();
+
+          return SingleChildScrollView(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Stack(
-                  children: [
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.4,
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10)),
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10.0),
-                          child: Image.asset(
-                            'assets/wachiwit-home-concerts-king-street-coffee.jpg',
-                            fit: BoxFit.cover,
-                          )),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          left: MediaQuery.of(context).size.width * 0.03,
-                          top: MediaQuery.of(context).size.height * 0.2),
-                      child: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.black45,
-                              borderRadius: BorderRadius.circular(10)),
-                          width: 600,
-                          child: Text(
-                            'Magna ullamco aliquip culpa consectetur laborum reprehenderit do adipisicing officia culpa.',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 30,
-                            ),
-                            textAlign: TextAlign.center,
-                          )),
-                    )
-                  ],
-                ),
-                Text(
-                  'Perfiles recientes: ',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+                SizedBox(
+                  height: 10,
                 ),
                 Container(
                   height: MediaQuery.of(context).size.height * 0.4,
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  child: Swiper(
-                    itemBuilder: (BuildContext context, int index) {
-                      return homeWeb(context, list[index]);
-                    },
-                    itemCount: 4,
-                    viewportFraction: 0.8,
-                    scale: 0.9,
-                    pagination:
-                        new SwiperPagination(margin: new EdgeInsets.all(5.0)),
+                  width: ancho,
+                  child: Stack(
+                    children: [
+                      Align(
+                        alignment: Alignment.center,
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.4,
+                          width: ancho,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10)),
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10.0),
+                              child: Image.asset(
+                                'assets/wachiwit-home-concerts-king-street-coffee.jpg',
+                                fit: BoxFit.cover,
+                              )),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 20, left: 20),
+                          child: Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.black45,
+                                  borderRadius: BorderRadius.circular(10)),
+                              width: 600,
+                              child: Text(
+                                'Magna ullamco aliquip culpa consectetur laborum reprehenderit do adipisicing officia culpa.',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 30,
+                                ),
+                                textAlign: TextAlign.center,
+                              )),
+                        ),
+                      )
+                    ],
                   ),
-                )
-
-                /*Container(
-                  color: Color.fromRGBO(228, 230, 232, 1),
-                  height: MediaQuery.of(context).size.height * 0.4,
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  child: new ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: snapshot.data.docs
-                        .map((QueryDocumentSnapshot document) {
-                      Map<String, dynamic> data =
-                          document.data() as Map<String, dynamic>;
-
-                      return Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: layaout(context, homeWeb(context, data),
-                            homeWeb2(context, data), homeMobil(context, data)),
-                      );
-                    }).toList(),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    width: ancho,
+                    child: Text(
+                      'Perfiles recientes: ',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                ),*/
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Container(
+                    height: 450,
+                    width: ancho2,
+                    child: Swiper(
+                      itemBuilder: (BuildContext context, int index) {
+                        return homeWeb(context, list[index]);
+                      },
+                      itemCount: 4,
+                      viewportFraction: 0.8,
+                      scale: 0.9,
+                      control: new SwiperControl(),
+                      pagination:
+                          new SwiperPagination(margin: new EdgeInsets.all(5.0)),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
               ],
             ),
           );
@@ -501,50 +525,58 @@ class HomePage extends StatelessWidget {
   }
 
   homeWeb(context, data) {
-    return Container(
-      width: 800,
-      height: alto,
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
-      child: Stack(
-        children: [
-          Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
-            child: Padding(
-              padding: EdgeInsets.only(
-                  right: MediaQuery.of(context).size.width * 0.3 + 10,
-                  left: 10),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: CircleAvatar(
-                        backgroundImage: NetworkImage(
-                            'https://static.photocdn.pt/images/articles/2017_1/iStock-545347988.jpg'),
-                        radius: 70),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: ListTile(
-                      title: Text(data["nombre"]),
-                      subtitle: Text(data["subtitulo"]),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 30),
+      child: Container(
+        width: ancho2,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30.0),
+            color: Colors.white,
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                  color: Colors.black45,
+                  blurRadius: 10.0,
+                  spreadRadius: 2.0,
+                  offset: Offset(2.0, 10.0))
+            ]),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+            width: ancho2 * 0.3,
+
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
+              child: Center(
+                child: Column(
+                
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: CircleAvatar(
+                          backgroundImage: NetworkImage(
+                              'https://static.photocdn.pt/images/articles/2017_1/iStock-545347988.jpg'),
+                          radius: 70),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: ElevatedButton(
-                        onPressed: () {},
-                        child: Center(child: Text('facebook'))),
-                  )
-                ],
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: ListTile(
+                        title: Text(data["nombre"]),
+                        subtitle: Text(data["subtitulo"]),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: ElevatedButton(
+                          onPressed: () {},
+                          child: Center(child: Text('facebook'))),
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.3,
+            Container(
+              width: ancho2 * 0.5,
               decoration: BoxDecoration(
                   color: azulOscuro(), borderRadius: BorderRadius.circular(10)),
               child: ListView(
@@ -591,67 +623,76 @@ class HomePage extends StatelessWidget {
                 ],
               ),
             ),
-          ),
-
-          //  Text(data['nombre']),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  homeWeb2(context, data) {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.8,
-      height: alto,
-      decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(10)),
-      child: Stack(
-        children: [
-          Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
-            child: Padding(
-              padding: EdgeInsets.only(
-                  right: MediaQuery.of(context).size.width * 0.6 + 10,
-                  left: 10),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: CircleAvatar(
-                        backgroundImage: NetworkImage(
-                            'https://static.photocdn.pt/images/articles/2017_1/iStock-545347988.jpg'),
-                        radius: 70),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: ListTile(
-                      title: Text(data["nombre"]),
-                      subtitle: Text(data["subtitulo"]),
+ homeWeb2(context, data) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 30),
+      child: Container(
+        width: ancho2,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30.0),
+            color: Colors.white,
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                  color: Colors.black45,
+                  blurRadius: 10.0,
+                  spreadRadius: 2.0,
+                  offset: Offset(2.0, 10.0))
+            ]),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+            width: ancho2 * 0.3,
+
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
+              child: Center(
+                child: Column(
+                
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: CircleAvatar(
+                          backgroundImage: NetworkImage(
+                              'https://static.photocdn.pt/images/articles/2017_1/iStock-545347988.jpg'),
+                          radius: 70),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: ElevatedButton(
-                        onPressed: () {},
-                        child: Center(child: Text('facebook'))),
-                  )
-                ],
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: ListTile(
+                        title: Text(data["nombre"]),
+                        subtitle: Text(data["subtitulo"]),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric( vertical: 20),
+                      child: ElevatedButton(
+                          onPressed: () {},
+                          child: Center(child: Text('facebook'))),
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.6,
+            Container(
+              width: ancho2 * 0.5,
               decoration: BoxDecoration(
                   color: azulOscuro(), borderRadius: BorderRadius.circular(10)),
               child: ListView(
                 children: [
-                  imagePortada(data['portada']),
                   Padding(
-                    padding: const EdgeInsets.all(25.0),
+                    padding: const EdgeInsets.only(top: 5, right: 10, left: 10),
+                    child: Container(
+                        height: 200, child: imagePortada(data['portada'])),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
                     child: Text(
                       "Informacion General",
                       style: TextStyle(
@@ -662,10 +703,14 @@ class HomePage extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 25, vertical: 20),
-                    child: Text(
-                      data["general"],
-                      style: TextStyle(color: Colors.white),
+                        horizontal: 25, vertical: 10),
+                    child: Container(
+                      height: 60,
+                      child: Text(
+                        data["general"],
+                        style: TextStyle(color: Colors.white),
+                        overflow: TextOverflow.clip,
+                      ),
                     ),
                   ),
                   //Expanded(child: Container()),
@@ -683,13 +728,12 @@ class HomePage extends StatelessWidget {
                 ],
               ),
             ),
-          ),
-
-          //  Text(data['nombre']),
-        ],
+          ],
+        ),
       ),
     );
   }
+
 
   homeMobil(context, data) {
     return Container(
