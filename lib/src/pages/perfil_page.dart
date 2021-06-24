@@ -94,7 +94,8 @@ class PerfilPage extends StatelessWidget {
               'habilidad':'${bloc2.habilidad}',
               'especialidad': '${bloc2.especilidad}',
               'instrumento':'${bloc2.instrumento}',
-              'grupos':'${bloc2.grupos}'
+              'grupos':'${bloc2.grupos}',
+              'url': 'https://static.photocdn.pt/images/articles/2017_1/iStock-545347988.jpg'
             },
           );
 

@@ -291,7 +291,4 @@ Widget layaout(
     }
   }
 
-  imageNetwork() {
-  return NetworkImage(
-      'https://static.photocdn.pt/images/articles/2017_1/iStock-545347988.jpg');
-}
+ 

@@ -11,12 +11,11 @@ class MyPostPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final g = FirebaseAuth.instance.currentUser;
-    return Scaffold(body: _streamMyPost(g.uid, g.displayName));
+    return Scaffold(body: _streamMyPost(g.uid, g.displayName, g.photoURL));
   }
 
-  Widget _streamMyPost(String id, String nombre) {
-    final Stream<DocumentSnapshot> _usersStream =
-        FirebaseFirestore.instance.collection('mypost').doc(id).snapshots();
+  Widget _streamMyPost(String id, String nombre, String url) {
+    final Stream<DocumentSnapshot> _usersStream = FirebaseFirestore.instance.collection('mypost').doc(id).snapshots();
     return StreamBuilder<DocumentSnapshot>(
         stream: _usersStream,
         builder:
@@ -49,7 +48,7 @@ class MyPostPage extends StatelessWidget {
           return Center(
             child: Container(
                 width: MediaQuery.of(context).size.width * 0.8,
-                child: _myPost(data, nombre)),
+                child: _myPost(data, nombre, url)),
           );
         });
   }
@@ -67,7 +66,7 @@ class MyPostPage extends StatelessWidget {
         });
   }
 
-  Widget _myPost(Map<String, dynamic> data, nombre) {
+  Widget _myPost(Map<String, dynamic> data, nombre, url) {
     return Card(
       child: Container(
           padding: EdgeInsets.symmetric(horizontal: 25),
@@ -96,7 +95,7 @@ class MyPostPage extends StatelessWidget {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(30.0),
                               child: FadeInImage(
-                                image: imageNetwork(),
+                                image: NetworkImage('$url'),
                                 placeholder: AssetImage('assets/loading.gif'),
                                 fadeInDuration: Duration(milliseconds: 200),
                                 width: 200,

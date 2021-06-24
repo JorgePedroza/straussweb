@@ -24,6 +24,7 @@ class UsuarioProvider {
        
       // _createPost(g.user.uid);
       await g.user.updateDisplayName(nombre);
+      await g.user.updatePhotoURL('https://static.photocdn.pt/images/articles/2017_1/iStock-545347988.jpg');
       DocumentReference userRef = FirebaseFirestore.instance.collection('usuarios').doc();
 
       userRef.set(
@@ -32,6 +33,7 @@ class UsuarioProvider {
           'displayName': nombre,
           'email': email,
           'lastSign': date,
+          'url' : 'https://static.photocdn.pt/images/articles/2017_1/iStock-545347988.jpg'
         },
       );
       return {'ok': true};

@@ -32,12 +32,15 @@ class _RegisterPageState extends State<RegisterPage> {
       width: double.infinity,
       height: double.infinity,
       decoration: fondoDegradado(),
-      child: layaout(context, _loginWeb(bloc, alto), _loginWeb2(bloc, alto),
+      child: layaout(
+          context,
+          _loginWeb(bloc, alto),
+          _loginWeb2(bloc, alto),
           Container(
-             width: double.infinity,
-      height: double.infinity,
-      color: Colors.white,
-            child: _loginMobil(bloc))),
+              width: double.infinity,
+              height: double.infinity,
+              color: Colors.white,
+              child: _loginMobil(bloc))),
     ));
   }
 
@@ -72,22 +75,19 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                     ),
-                    
                     Padding(
                       padding: const EdgeInsets.only(top: 20),
                       child: Container(
                           child: Text(
-                            'Magna commodo id eiusmod laboris cillum excepteur duis excepteur non fugiat magna elit labore proident.',
-                            style: TextStyle(fontSize: 20),
-                            textAlign: TextAlign.center,
-                          )),
+                        'Magna commodo id eiusmod laboris cillum excepteur duis excepteur non fugiat magna elit labore proident.',
+                        style: TextStyle(fontSize: 20),
+                        textAlign: TextAlign.center,
+                      )),
                     ),
-                   
                     Padding(
-                         padding: const EdgeInsets.only(top: 120),
+                      padding: const EdgeInsets.only(top: 120),
                       child: _bottonLogin(),
                     ),
-                    
                   ],
                 ),
               ),
@@ -166,7 +166,7 @@ class _RegisterPageState extends State<RegisterPage> {
       slivers: [
         SliverAppBar(
           expandedHeight: 250,
-          backgroundColor:Colors.white,
+          backgroundColor: Colors.white,
           elevation: 1,
           pinned: false,
           snap: false,
@@ -189,12 +189,10 @@ class _RegisterPageState extends State<RegisterPage> {
           delegate: SliverChildListDelegate([
             Container(
               decoration: BoxDecoration(
-                color: 
-                azulOscuro(),
-                borderRadius: BorderRadius.only(
-                  
-                  topLeft: Radius.circular(10),topRight: Radius.circular(10))
-              ),
+                  color: azulOscuro(),
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10))),
               height: 800,
               width: double.infinity,
               child: Column(
@@ -214,11 +212,11 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: _campoNombre(context, bloc),
                   ),
                   Padding(
-                     padding: const EdgeInsets.all(20.0),
+                    padding: const EdgeInsets.all(20.0),
                     child: _campoCorreo(context, bloc),
                   ),
                   Padding(
-                     padding: const EdgeInsets.all(20.0),
+                    padding: const EdgeInsets.all(20.0),
                     child: _campoFecha(context, bloc),
                   ),
                   Padding(
@@ -337,6 +335,7 @@ class _RegisterPageState extends State<RegisterPage> {
           return Container(
             width: 400,
             child: TextField(
+              readOnly: true,
               enableInteractiveSelection: false,
               controller: _inputFieldDateController,
               keyboardType: TextInputType.datetime,
@@ -350,7 +349,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   Icons.calendar_today_outlined,
                   color: azulOscuro(),
                 ), // myIcon is a 48px-wide widget.
-                
+
                 errorText: snapshot.error,
                 errorStyle: TextStyle(fontSize: 15),
                 hintText: 'mm/dd/yyyy',
