@@ -313,9 +313,7 @@ class NavegacionPage extends StatelessWidget {
         stream: _usersStream,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
+            return Container();
           }
           if (snapshot.hasData) {
             Map<String, dynamic> data = snapshot.data.data();
