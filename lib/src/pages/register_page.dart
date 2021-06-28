@@ -12,6 +12,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   bool _sel = false;
+  bool password = false;
   double alto = 0;
   TextEditingController _inputFieldDateController = new TextEditingController();
   final usuarioProvider = new UsuarioProvider();
@@ -393,7 +394,7 @@ class _RegisterPageState extends State<RegisterPage> {
           return Container(
             width: 400,
             child: TextField(
-                obscureText: true,
+                obscureText: password,
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
                   filled: true,

@@ -420,105 +420,113 @@ class HomePage extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           }
-          List<Map<String, dynamic>> list = [];
+          if (snapshot.hasData) {
+            List<Map<String, dynamic>> list = [];
 
-          snapshot.data.docs.map((QueryDocumentSnapshot document) {
-            Map<String, dynamic> data = document.data() as Map<String, dynamic>;
-            list.add(data);
-          }).toList();
+            snapshot.data.docs.map((QueryDocumentSnapshot document) {
+              Map<String, dynamic> data =
+                  document.data() as Map<String, dynamic>;
+              list.add(data);
+            }).toList();
 
-          return SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.4,
-                  width: ancho,
-                  child: Stack(
-                    children: [
-                      Align(
-                        alignment: Alignment.center,
-                        child: Container(
-                          height: MediaQuery.of(context).size.height * 0.4,
-                          width: ancho,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10)),
-                          child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10.0),
-                              child: Image.asset(
-                                'assets/wachiwit-home-concerts-king-street-coffee.jpg',
-                                fit: BoxFit.cover,
-                              )),
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 20, left: 20),
-                          child: Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.black45,
-                                  borderRadius: BorderRadius.circular(10)),
-                              width: 600,
-                              child: Text(
-                                'Magna ullamco aliquip culpa consectetur laborum reprehenderit do adipisicing officia culpa.',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 30,
-                                ),
-                                textAlign: TextAlign.center,
-                              )),
-                        ),
-                      )
-                    ],
+            return SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  SizedBox(
+                    height: 10,
                   ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Align(
-                  alignment: Alignment.center,
-                  child: Container(
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.4,
                     width: ancho,
-                    child: Text(
-                      'Perfiles recientes: ',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                    child: Stack(
+                      children: [
+                        Align(
+                          alignment: Alignment.center,
+                          child: Container(
+                            height: MediaQuery.of(context).size.height * 0.4,
+                            width: ancho,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10)),
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10.0),
+                                child: Image.asset(
+                                  'assets/wachiwit-home-concerts-king-street-coffee.jpg',
+                                  fit: BoxFit.cover,
+                                )),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.only(bottom: 20, left: 20),
+                            child: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.black45,
+                                    borderRadius: BorderRadius.circular(10)),
+                                width: 600,
+                                child: Text(
+                                  'Magna ullamco aliquip culpa consectetur laborum reprehenderit do adipisicing officia culpa.',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 30,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                )),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      width: ancho,
+                      child: Text(
+                        'Perfiles recientes: ',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Container(
-                    height: 450,
-                    width: ancho2,
-                    child: Swiper(
-                      itemBuilder: (BuildContext context, int index) {
-                        return homeWeb(context, list[index]);
-                      },
-                      autoplay: true,
-                      itemCount: 4,
-                      viewportFraction: 0.8,
-                      scale: 0.9,
-                      control: new SwiperControl(),
-                      pagination:
-                          new SwiperPagination(margin: new EdgeInsets.all(5.0)),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Container(
+                      height: 450,
+                      width: ancho2,
+                      child: Swiper(
+                        itemBuilder: (BuildContext context, int index) {
+                          return homeWeb(context, list[index]);
+                        },
+                        autoplay: true,
+                        autoplayDelay: 5000,
+                        itemCount: 4,
+                        viewportFraction: 0.8,
+                        scale: 0.9,
+                        control: new SwiperControl(),
+                        pagination: new SwiperPagination(
+                            margin: new EdgeInsets.all(5.0)),
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-              ],
-            ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                ],
+              ),
+            );
+          }
+          return Center(
+            child: CircularProgressIndicator(),
           );
         },
       ),
@@ -526,7 +534,6 @@ class HomePage extends StatelessWidget {
   }
 
   homeWeb(context, data) {
-    
     return Padding(
       padding: const EdgeInsets.only(bottom: 30),
       child: Container(
@@ -580,9 +587,13 @@ class HomePage extends StatelessWidget {
                   color: azulOscuro(), borderRadius: BorderRadius.circular(10)),
               child: ListView(
                 children: [
-                  Container(height: 200, child: ClipRRect(
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-                    child: imagePortada(data['portada']))),
+                  Container(
+                      height: 200,
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10)),
+                          child: imagePortada(data['portada']))),
 
                   Padding(
                     padding: const EdgeInsets.all(10.0),

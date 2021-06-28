@@ -6,7 +6,7 @@ import 'package:straussweb/src/routes/rutas.dart';
 
 Future<void> main() async {
   await Firebase.initializeApp();
-   await FirebaseAuth.instance.signOut();
+  await FirebaseAuth.instance.signOut();
   runApp(MyApp());
 }
 

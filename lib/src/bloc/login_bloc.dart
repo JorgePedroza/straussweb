@@ -11,6 +11,7 @@ class LoginBloc with Validators {
   final _dateController = BehaviorSubject<String>();
   final _pageController = BehaviorSubject<String>();
   final _searchController = BehaviorSubject<bool>();
+  final _imageController = BehaviorSubject<String>();
 
   //Controller formulario de perfil
    final _imagePortadaController = BehaviorSubject<String>();
@@ -23,7 +24,8 @@ class LoginBloc with Validators {
    final _habilidadController = BehaviorSubject<String>();
    final _especialidadController = BehaviorSubject<String>();
    final _instrumentoController = BehaviorSubject<String>();  
-   final _gruposController = BehaviorSubject<String>();  
+   final _gruposController = BehaviorSubject<String>(); 
+ 
    
    // Recuperar los datos del Stream
   Stream<String> get nameStream     => _nameController.stream.transform( validarName );
@@ -31,7 +33,8 @@ class LoginBloc with Validators {
   Stream<String> get passwordStream => _passwordController.stream.transform( validarPassword );
   Stream<String> get dateStream => _dateController.transform( validarDate );
   Stream<String> get pageStream => _pageController.stream;
-   Stream<bool> get searchStream => _searchController.stream;
+  Stream<bool> get searchStream => _searchController.stream;
+  Stream<String> get imageStream => _imageController.stream;
   
   //recuperar datos del formulario 
   Stream<String> get imagePortadaStream     => _imagePortadaController.stream;
@@ -52,6 +55,8 @@ class LoginBloc with Validators {
   Stream<bool> get formValidStream => Rx.combineLatest4(nameStream ,emailStream, passwordStream, dateStream, (n , e, p, d) => true ).asBroadcastStream();
   Stream<bool> get formValidStreamLogin => Rx.combineLatest2(emailStream, passwordStream, (e, p) => true ).asBroadcastStream();
 
+  Stream<bool> get formValidStreamUpdate=> Rx.combineLatest3(nameStream, emailStream, imageStream, (e, p, i) => true ).asBroadcastStream();
+
   // Stream<bool> get formValidStreamFormulario => Rx.combineLatest9(emailStream, passwordStream, (e, p) => true );
 //=========================================FormValidators=========================================================================================
 
@@ -62,6 +67,7 @@ class LoginBloc with Validators {
   Function(String) get changeDate => _dateController.sink.add;
   Function(String) get changePage => _pageController.sink.add;
     Function(bool) get changeSearch => _searchController.sink.add;
+  Function(String) get changeImage => _imageController.sink.add;
 
  //Insertar datos del formulario 
  Function(String) get changeImageNetwork    => _imagePortadaController.sink.add;
@@ -83,6 +89,7 @@ class LoginBloc with Validators {
   String get date => _dateController.value;
   String get page => _pageController.value;
   bool get search => _searchController.value;
+  String get image => _imageController.value;
 
   //Obtener datos del formulario 
   String get imageNetwork    => _imagePortadaController.value;
@@ -99,7 +106,7 @@ class LoginBloc with Validators {
 
 
   dispose() {
-    
+    _imageController?.close();
      _searchController?.close();
       _gruposController?.close();
       _instrumentoController?.close();

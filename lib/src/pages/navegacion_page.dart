@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:straussweb/src/bloc/login_bloc.dart';
 import 'package:straussweb/src/bloc/provider.dart';
 import 'package:straussweb/src/services/usuario_provider.dart';
 import 'package:straussweb/src/pages/config_page.dart';
@@ -72,10 +74,10 @@ class NavegacionPage extends StatelessWidget {
 
   Widget appBarWeb(BuildContext context) {
     return Row(
-     crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5 ),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
           child: Image.asset(
             'assets/ima7.png',
             height: 45,
@@ -97,7 +99,7 @@ class NavegacionPage extends StatelessWidget {
           ),
         ),
         Padding(
-           padding: const EdgeInsets.only(top: 10),
+          padding: const EdgeInsets.only(top: 10),
           child: _authOptions(),
         )
       ],
@@ -199,7 +201,6 @@ class NavegacionPage extends StatelessWidget {
                 ),
                 onSelected: (selectedValue) {
                   if (!selectedValue) {
-                    
                     auth.signOut();
                     Navigator.pushReplacementNamed(context, 'status');
                   } else {}
@@ -237,9 +238,8 @@ class NavegacionPage extends StatelessWidget {
             return Row(
               children: [
                 Container(
-                  margin: EdgeInsets.only(right: 10.0),
-                  child: CircleAvatar(
-                      child: Text('JG'), backgroundColor: azulOscuro()),
+                  margin: EdgeInsets.only(right: 20.0),
+                  child: avatrImage(auth.currentUser.uid),
                 ),
                 Container(
                     child: Container(
@@ -270,19 +270,19 @@ class NavegacionPage extends StatelessWidget {
                       ),
                       ElevatedButton(
                           child: Icon(
-                            Icons.call_missed_outgoing_sharp,
-                            color: azulOscuro(),
+                            Icons.logout,
+                            color: Colors.white,
                           ),
                           style: ButtonStyle(
                             backgroundColor:
-                                MaterialStateProperty.all(Colors.red),
+                                MaterialStateProperty.all(azulOscuro()),
                           ),
                           onPressed: () {
                             UsuarioProvider f = UsuarioProvider();
                             final bloc = Provider.of(context);
                             f.logout();
                             Navigator.pushReplacementNamed(context, 'status');
-                            bloc.changePage('home');
+                            bloc.changePage('0');
                           })
                     ],
                   ),
@@ -305,6 +305,28 @@ class NavegacionPage extends StatelessWidget {
           }
         });
   }
+
+  Widget avatrImage(id) {
+    final Stream<DocumentSnapshot> _usersStream =
+        FirebaseFirestore.instance.collection('usuarios').doc(id).snapshots();
+    return StreamBuilder(
+        stream: _usersStream,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (snapshot.hasData) {
+            Map<String, dynamic> data = snapshot.data.data();
+            return CircleAvatar(
+                backgroundImage: NetworkImage(data["url"]),
+                backgroundColor: azulOscuro());
+          }
+          return CircularProgressIndicator();
+        
+        });
+  }
 }
 
 class NavegacionPageOff extends StatelessWidget {
@@ -318,10 +340,8 @@ class NavegacionPageOff extends StatelessWidget {
           child: Stack(
             children: [
               _pageHome(context),
-               layaout(context,
-                  _appbarWeb(context, bloc),
-                  _appbarWeb(context, bloc), 
-                  _appbarMobil(context)),
+              layaout(context, _appbarWeb(context, bloc),
+                  _appbarWeb(context, bloc), _appbarMobil(context)),
             ],
           ),
         ));
@@ -389,8 +409,7 @@ class NavegacionPageOff extends StatelessWidget {
         Container(height: 60),
         Container(
             height: MediaQuery.of(context).size.height - 60,
-            child: HomePage()
-            ),
+            child: HomePageOff()),
       ],
     );
   }
@@ -431,6 +450,7 @@ class _ItemsBarState extends State<ItemsBar> {
   @override
   Widget build(BuildContext context) {
     final bloc = Provider.of(context);
+    colorState(bloc);
     return Row(
       children: [
         ElevatedButton(
@@ -446,14 +466,7 @@ class _ItemsBarState extends State<ItemsBar> {
                     child: Icon(Icons.home, size: 30, color: _color1))),
             onPressed: () {
               setState(() {
-                _color1 = Color.fromRGBO(16, 30, 90, 1);
-                _color2 = Colors.white;
-                _color3 = Colors.white;
-                _color4 = Colors.white;
-                _color11 = Colors.white;
-                _color22 = Colors.transparent;
-                _color33 = Colors.transparent;
-                _color44 = Colors.transparent;
+                colorState(bloc);
                 bloc.changePage('0');
               });
             }),
@@ -470,14 +483,7 @@ class _ItemsBarState extends State<ItemsBar> {
                     child: Icon(Icons.person_sharp, size: 30, color: _color2))),
             onPressed: () {
               setState(() {
-                _color1 = Colors.white;
-                _color2 = Color.fromRGBO(16, 30, 90, 1);
-                _color3 = Colors.white;
-                _color4 = Colors.white;
-                _color11 = Colors.transparent;
-                _color22 = Colors.white;
-                _color33 = Colors.transparent;
-                _color44 = Colors.transparent;
+                colorState(bloc);
                 bloc.changePage('1');
               });
             }),
@@ -495,14 +501,7 @@ class _ItemsBarState extends State<ItemsBar> {
                         size: 30, color: _color3))),
             onPressed: () {
               setState(() {
-                _color1 = Colors.white;
-                _color2 = Colors.white;
-                _color3 = Color.fromRGBO(16, 30, 90, 1);
-                _color4 = Colors.white;
-                _color11 = Colors.transparent;
-                _color22 = Colors.transparent;
-                _color33 = Colors.white;
-                _color44 = Colors.transparent;
+                colorState(bloc);
                 bloc.changePage('2');
               });
             }),
@@ -518,19 +517,67 @@ class _ItemsBarState extends State<ItemsBar> {
                     message: 'Settings',
                     child: Icon(Icons.settings, size: 30, color: _color4))),
             onPressed: () {
+              colorState(bloc);
               setState(() {
-                _color1 = Colors.white;
-                _color2 = Colors.white;
-                _color3 = Colors.white;
-                _color4 = Color.fromRGBO(16, 30, 90, 1);
-                _color11 = Colors.transparent;
-                _color22 = Colors.transparent;
-                _color33 = Colors.transparent;
-                _color44 = Colors.white;
                 bloc.changePage('3');
               });
             }),
       ],
     );
+  }
+
+  colorState(LoginBloc bloc) {
+    switch (bloc.page) {
+      case '0':
+        _color1 = Color.fromRGBO(16, 30, 90, 1);
+        _color2 = Colors.white;
+        _color3 = Colors.white;
+        _color4 = Colors.white;
+        _color11 = Colors.white;
+        _color22 = Colors.transparent;
+        _color33 = Colors.transparent;
+        _color44 = Colors.transparent;
+        break;
+      case '1':
+        _color1 = Colors.white;
+        _color2 = Color.fromRGBO(16, 30, 90, 1);
+        _color3 = Colors.white;
+        _color4 = Colors.white;
+        _color11 = Colors.transparent;
+        _color22 = Colors.white;
+        _color33 = Colors.transparent;
+        _color44 = Colors.transparent;
+        break;
+      case '2':
+        _color1 = Colors.white;
+        _color2 = Colors.white;
+        _color3 = Color.fromRGBO(16, 30, 90, 1);
+        _color4 = Colors.white;
+        _color11 = Colors.transparent;
+        _color22 = Colors.transparent;
+        _color33 = Colors.white;
+        _color44 = Colors.transparent;
+        break;
+      case '3':
+        _color1 = Colors.white;
+        _color2 = Colors.white;
+        _color3 = Colors.white;
+        _color4 = Color.fromRGBO(16, 30, 90, 1);
+        _color11 = Colors.transparent;
+        _color22 = Colors.transparent;
+        _color33 = Colors.transparent;
+        _color44 = Colors.white;
+        break;
+
+      default:
+        _color1 = Color.fromRGBO(16, 30, 90, 1);
+        _color2 = Colors.white;
+        _color3 = Colors.white;
+        _color4 = Colors.white;
+        _color11 = Colors.white;
+        _color22 = Colors.transparent;
+        _color33 = Colors.transparent;
+        _color44 = Colors.transparent;
+    }
   }
 }

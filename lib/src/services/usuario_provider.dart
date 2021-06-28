@@ -25,7 +25,8 @@ class UsuarioProvider {
       // _createPost(g.user.uid);
       await g.user.updateDisplayName(nombre);
       await g.user.updatePhotoURL('https://static.photocdn.pt/images/articles/2017_1/iStock-545347988.jpg');
-      DocumentReference userRef = FirebaseFirestore.instance.collection('usuarios').doc();
+      await g.user.updateEmail(email);
+      DocumentReference userRef = FirebaseFirestore.instance.collection('usuarios').doc(g.user.uid);
 
       userRef.set(
         {
@@ -43,6 +44,44 @@ class UsuarioProvider {
     }
   }
 
+  Future actualizar( String nombre, String email, String image) async {
+   
+  
+    try {
+     final g = FirebaseAuth.instance.currentUser;
+       
+    
+      g.updateDisplayName(nombre);
+      g.updateEmail(email);
+      await g.updatePhotoURL(image);
+
+      DocumentReference userRef = FirebaseFirestore.instance.collection('usuarios').doc(g.uid);
+
+      userRef.update(
+        {
+          'id': g.uid,
+          'displayName': nombre,
+          'email': email,
+          'url' : image
+        },
+      );
+
+    DocumentReference myPostRef = FirebaseFirestore.instance.collection('mypost').doc(g.uid);
+
+       myPostRef.update(
+        {
+          'nombre': nombre,
+          'url' : image
+        },
+      );
+
+
+      return {'ok': true};
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+      return {'ok': false, 'mensaje': e.message};
+    }
+  }
 
   void logout() async {
     await FirebaseAuth.instance.signOut();
