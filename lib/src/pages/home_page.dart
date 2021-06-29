@@ -2,9 +2,9 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_card_swipper/flutter_card_swiper.dart';
+import 'package:straussweb/models/models.dart';
 import 'package:straussweb/src/utils/colors_utils.dart';
 import 'package:straussweb/src/widgets/widgets.dart';
 
@@ -19,6 +19,7 @@ class _HomePageOffState extends State<HomePageOff> {
   bool _visible2 = true;
   bool _visible3 = true;
   bool _visible4 = true;
+  
 
   FirebaseAuth auth = FirebaseAuth.instance;
   _loadData() async {
@@ -533,7 +534,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  homeWeb(context, data) {
+  homeWeb(context, Map<String, dynamic> data) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 30),
       child: Container(
@@ -574,7 +575,10 @@ class HomePage extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                           
+                           launchURL("https://www.facebook.com/${data['facebook']}");
+                          },
                           child: Center(child: Text('facebook'))),
                     )
                   ],
@@ -626,7 +630,12 @@ class HomePage extends StatelessWidget {
                       child: Center(
                         child: Text('Ver perfil'),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                          ModelUsuario usuario = ModelUsuario();
+                          usuario.setMap(data);
+                          Navigator.pushNamed(context, 'postUsuario');
+
+                      },
                     ),
                   )
                 ],
@@ -636,199 +645,7 @@ class HomePage extends StatelessWidget {
         ),
       ),
     );
+    
   }
-
-  homeWeb2(context, data) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 30),
-      child: Container(
-        width: ancho2,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30.0),
-            color: Colors.white,
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                  color: Colors.black45,
-                  blurRadius: 10.0,
-                  spreadRadius: 2.0,
-                  offset: Offset(2.0, 10.0))
-            ]),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              width: ancho2 * 0.3,
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
-              child: Center(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: CircleAvatar(
-                          backgroundImage: NetworkImage(
-                              'https://static.photocdn.pt/images/articles/2017_1/iStock-545347988.jpg'),
-                          radius: 70),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: ListTile(
-                        title: Text(data["nombre"]),
-                        subtitle: Text(data["subtitulo"]),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
-                      child: ElevatedButton(
-                          onPressed: () {},
-                          child: Center(child: Text('facebook'))),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              width: ancho2 * 0.5,
-              decoration: BoxDecoration(
-                  color: azulOscuro(), borderRadius: BorderRadius.circular(10)),
-              child: ListView(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5, right: 10, left: 10),
-                    child: Container(
-                        height: 200, child: imagePortada(data['portada'])),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(
-                      "Informacion General",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 25, vertical: 10),
-                    child: Container(
-                      height: 60,
-                      child: Text(
-                        data["general"],
-                        style: TextStyle(color: Colors.white),
-                        overflow: TextOverflow.clip,
-                      ),
-                    ),
-                  ),
-                  //Expanded(child: Container()),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        vertical: 20,
-                        horizontal: MediaQuery.of(context).size.width * 0.1),
-                    child: ElevatedButton(
-                      child: Center(
-                        child: Text('Ver perfil'),
-                      ),
-                      onPressed: () {},
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  homeMobil(context, data) {
-    return Container(
-      width: 800,
-      height: alto,
-      decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(10)),
-      child: Stack(
-        children: [
-          Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
-            child: Padding(
-              padding: EdgeInsets.only(
-                  right: MediaQuery.of(context).size.width * 0.3 + 10,
-                  left: 10),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: CircleAvatar(
-                        backgroundImage: NetworkImage(
-                            'https://static.photocdn.pt/images/articles/2017_1/iStock-545347988.jpg'),
-                        radius: 70),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: ListTile(
-                      title: Text(data["nombre"]),
-                      subtitle: Text(data["subtitulo"]),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: ElevatedButton(
-                        onPressed: () {},
-                        child: Center(child: Text('facebook'))),
-                  )
-                ],
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Container(
-              width: MediaQuery.of(context).size.width * 0.3,
-              decoration: BoxDecoration(
-                  color: azulOscuro(), borderRadius: BorderRadius.circular(10)),
-              child: ListView(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(25.0),
-                    child: Text(
-                      "Informacion General",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 25, vertical: 20),
-                    child: Text(
-                      data["general"],
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  //Expanded(child: Container()),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                        vertical: 20,
-                        horizontal: MediaQuery.of(context).size.width * 0.1),
-                    child: ElevatedButton(
-                      child: Center(
-                        child: Text('Ver perfil'),
-                      ),
-                      onPressed: () {},
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-
-          //  Text(data['nombre']),
-        ],
-      ),
-    );
-  }
+  
 }

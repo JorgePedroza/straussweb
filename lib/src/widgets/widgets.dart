@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:straussweb/src/bloc/provider.dart';
 import 'package:straussweb/src/utils/colors_utils.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 BoxDecoration decorationBorderContianet(Color color) {
   return BoxDecoration(
@@ -108,7 +109,7 @@ Widget streamBusqueda(context) {
                               .get()
                               .then((QuerySnapshot querySnapshot) {
                             querySnapshot.docs.forEach((doc) {
-                              Map<String, dynamic> data =  doc.data() as Map<String, dynamic>;
+                              //Map<String, dynamic> data =  doc.data() as Map<String, dynamic>;
                            
                             });
                           });
@@ -290,5 +291,9 @@ Widget layaout(
         );
     }
   }
+
+  void launchURL(String url) async =>
+    await canLaunch(url) ? await launch(url) : throw 'Could not launch $url';
+
 
  

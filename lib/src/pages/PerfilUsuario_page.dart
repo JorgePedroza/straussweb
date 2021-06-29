@@ -1,71 +1,18 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:straussweb/src/pages/perfil_page.dart';
+import 'package:straussweb/models/models.dart';
 import 'package:straussweb/src/utils/colors_utils.dart';
 import 'package:straussweb/src/widgets/widgets.dart';
 
-class MyPostPage extends StatelessWidget {
+
+class PerfilUsuarioPage extends StatelessWidget {
+  
+
   @override
   Widget build(BuildContext context) {
-    final g = FirebaseAuth.instance.currentUser;
-    return Scaffold(body: _streamMyPost(g.uid, g.displayName, g.photoURL));
+    ModelUsuario usu = ModelUsuario();
+    return Scaffold(body: _myPost(usu),);
   }
-
-  Widget _streamMyPost(String id, String nombre, String url) {
-    final Stream<DocumentSnapshot> _usersStream =
-        FirebaseFirestore.instance.collection('mypost').doc(id).snapshots();
-    return StreamBuilder<DocumentSnapshot>(
-        stream: _usersStream,
-        builder:
-            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-
-          if (!snapshot.data.exists) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Container(
-                  height: 20,
-                ),
-                Text('Ya puedes comenzar a hacer tu perfil'),
-                Align(
-                    alignment: Alignment.bottomRight,
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 20),
-                      child: _floatingButton(context, id, nombre),
-                    ))
-              ],
-            );
-          }
-
-          Map<String, dynamic> data = snapshot.data.data();
-          return Center(
-            child: Container(
-                width: MediaQuery.of(context).size.width * 0.8,
-                child: _myPost(data, nombre, url)),
-          );
-        });
-  }
-
-  FloatingActionButton _floatingButton(context, id, String nombre) {
-    return FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () async {
-          showDialog(
-              context: context,
-              barrierDismissible: true,
-              builder: (context) {
-                return PerfilPage(id, nombre);
-              });
-        });
-  }
-
-  Widget _myPost(Map<String, dynamic> data, nombre, url) {
+  Widget _myPost(ModelUsuario usu) {
     return Card(
       child: Container(
           padding: EdgeInsets.symmetric(horizontal: 25),
@@ -79,7 +26,7 @@ class MyPostPage extends StatelessWidget {
                     Container(
                         width: double.infinity,
                         height: 550,
-                        child: imagePortada(data['portada'])),
+                        child: imagePortada(usu.getPortada)),
                     Padding(
                       padding:
                           const EdgeInsets.only(top: 400, left: 20, right: 20),
@@ -94,7 +41,7 @@ class MyPostPage extends StatelessWidget {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(30.0),
                               child: FadeInImage(
-                                image: NetworkImage('$url'),
+                                image: NetworkImage('${usu.getUrl}'),
                                 placeholder: AssetImage('assets/loading.gif'),
                                 fadeInDuration: Duration(milliseconds: 200),
                                 width: 200,
@@ -109,10 +56,10 @@ class MyPostPage extends StatelessWidget {
                               width: 200,
                               child: ListTile(
                                   title: SelectableText(
-                                    '$nombre',
+                                    '$usu.getNombre',
                                   ),
                                   subtitle:
-                                      SelectableText('${data['subtitulo']}')),
+                                      SelectableText('${usu.getSubtitulo}')),
                             ),
                           ),
                           //
@@ -133,7 +80,7 @@ class MyPostPage extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text('Telefono: '),
-                                    SelectableText('${data['telefono']}')
+                                    SelectableText('${usu.getTelefono}')
                                   ],
                                 ),
                                 SizedBox(
@@ -152,7 +99,7 @@ class MyPostPage extends StatelessWidget {
                                         style: TextStyle(color: Colors.white),
                                       ))),
                                   onPressed: () {
-                                   launchURL("https://www.facebook.com/${data['facebook']}");
+                                    launchURL("https://www.facebook.com/${usu.getFacebook}");
                                   },
                                 ),
                               ],
@@ -173,7 +120,7 @@ class MyPostPage extends StatelessWidget {
                 SizedBox(
                   height: 20,
                 ),
-                SelectableText('${data['general']}'),
+                SelectableText('${usu.getGeneral}'),
                 SizedBox(
                   height: 20,
                 ),
@@ -188,7 +135,7 @@ class MyPostPage extends StatelessWidget {
                   padding: const EdgeInsets.only(right: 110),
                   child: Row(
                     children: [
-                      Expanded(child: SelectableText('${data['personal']}')),
+                      Expanded(child: SelectableText('${usu.getPersonal}')),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 60),
                         child: Icon(
@@ -212,7 +159,7 @@ class MyPostPage extends StatelessWidget {
                   child: Row(
                     children: [
                       Expanded(
-                        child: SelectableText('${data['participaciones']}'),
+                        child: SelectableText('${usu.getParticipaciones}'),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 60),
@@ -249,7 +196,7 @@ class MyPostPage extends StatelessWidget {
                               SizedBox(
                                 height: 20,
                               ),
-                              SelectableText('${data['habilidad']}'),
+                              SelectableText('${usu.getHabilidad}'),
                               SizedBox(
                                 height: 60,
                               ),
@@ -277,7 +224,7 @@ class MyPostPage extends StatelessWidget {
                               SizedBox(
                                 height: 20,
                               ),
-                              SelectableText('${data['especialidad']}'),
+                              SelectableText('${usu.getEspecialidad}'),
                               SizedBox(
                                 height: 60,
                               ),
@@ -305,7 +252,7 @@ class MyPostPage extends StatelessWidget {
                               SizedBox(
                                 height: 20,
                               ),
-                              SelectableText('${data['instrumento']}'),
+                              SelectableText('${usu.getInstrumento}'),
                               SizedBox(
                                 height: 60,
                               ),
@@ -331,7 +278,7 @@ class MyPostPage extends StatelessWidget {
                 Row(
                   children: [
                     Expanded(
-                      child: SelectableText('${data['grupos']}'),
+                      child: SelectableText('${usu.getGrupos}'),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 60),
@@ -348,5 +295,4 @@ class MyPostPage extends StatelessWidget {
           )),
     );
   }
-  
 }

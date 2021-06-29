@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:straussweb/src/pages/PerfilUsuario_page.dart';
 import 'package:straussweb/src/pages/config_page.dart';
 import 'package:straussweb/src/pages/help_page.dart';
 import 'package:straussweb/src/pages/home_page.dart';
@@ -17,7 +18,8 @@ Map<String, WidgetBuilder> getRoutes() {
  "config":  (BuildContext context) => ConfigPage(),
  "navegacion":  (BuildContext context) => NavegacionPage(),
  "home":  (BuildContext context) => HomePageOff(),
- 'status': (BuildContext context) => StatusUsuario()
+ 'status': (BuildContext context) => StatusUsuario(),
+  'postUsuario': (BuildContext context) => PerfilUsuarioPage()
   };
 }
 
