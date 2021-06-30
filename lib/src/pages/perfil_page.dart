@@ -501,9 +501,9 @@ Widget _campoInformacionFacebook(bloc) {
           decoration: InputDecoration(
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
             //contentPadding: const EdgeInsets.symmetric(vertical: 60.0),
-           
-            hintText: 'Link de facebook.',
-            counter: Text(''),
+           counter: Text('Escribe aqui tu nombre de facebook'),
+            hintText: 'https://www.facebook.com/nombre-facebook',
+          
           ),
           onChanged:bloc.changeFacebook
         ),
